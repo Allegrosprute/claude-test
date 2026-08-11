@@ -1,0 +1,1808 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interaktive Wettbewerbsübersicht AI Role-Play / Sales Training DACH, Stand 11.08.2026.">
+<title>Wettbewerbsübersicht — AI Role-Play / Sales Training DACH</title>
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img,svg{display:block;max-width:100%}</style>
+</head>
+<body>
+<style>
+  /* ── Tokens ──────────────────────────────────────────────────────────── */
+  :root {
+    color-scheme: light;
+
+    --page:        #EFF1F0;
+    --surface:     #FBFCFB;
+    --surface-2:   #F5F7F6;
+    --ink:         #121A19;
+    --ink-2:       #4A5654;
+    --ink-3:       #7C8A88;
+    --rule:        #DCE2E0;
+    --rule-2:      #C9D2D0;
+
+    --accent:      #0E5B54;
+    --accent-soft: #E2EDEB;
+    --lime:        #A9D02B;
+    --lime-ink:    #4A5D08;
+
+    /* Sequential threat ramp — one hue, monotonic lightness (OKLCH L .76→.43) */
+    --t-1: #E39C8B;   /* niedrig    */
+    --t-2: #D4704F;   /* mittel     */
+    --t-3: #BE4530;   /* hoch       */
+    --t-4: #8F2119;   /* kritisch   */
+    --t-0: #B3BEBC;   /* beobachten */
+    --t-x: #98A3A1;   /* erledigt   */
+
+    --t-1-wash: #FBEDE9;
+    --t-2-wash: #FAE7E0;
+    --t-3-wash: #F8E2DC;
+    --t-4-wash: #F5DED9;
+    --t-0-wash: #EDF0EF;
+
+    --font-display: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-ui: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-serif: Charter, "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+    --shadow: 0 1px 2px rgba(18,26,25,.05), 0 8px 24px -16px rgba(18,26,25,.18);
+    --maxw: 1160px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page:        #0C1110;
+      --surface:     #141A19;
+      --surface-2:   #1A2221;
+      --ink:         #F1F4F3;
+      --ink-2:       #A8B5B3;
+      --ink-3:       #7C8A88;
+      --rule:        #263130;
+      --rule-2:      #35423F;
+
+      --accent:      #4FBFAE;
+      --accent-soft: #16302C;
+      --lime:        #C6E85C;
+      --lime-ink:    #C6E85C;
+
+      --t-1: #F0B4A2;
+      --t-2: #E08663;
+      --t-3: #D25A40;
+      --t-4: #B93A2A;
+      --t-0: #56635F;
+      --t-x: #5E6B68;
+
+      --t-1-wash: #2C201C;
+      --t-2-wash: #31201A;
+      --t-3-wash: #341D17;
+      --t-4-wash: #331A15;
+      --t-0-wash: #1C2423;
+
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page:        #0C1110;
+    --surface:     #141A19;
+    --surface-2:   #1A2221;
+    --ink:         #F1F4F3;
+    --ink-2:       #A8B5B3;
+    --ink-3:       #7C8A88;
+    --rule:        #263130;
+    --rule-2:      #35423F;
+
+    --accent:      #4FBFAE;
+    --accent-soft: #16302C;
+    --lime:        #C6E85C;
+    --lime-ink:    #C6E85C;
+
+    --t-1: #F0B4A2;
+    --t-2: #E08663;
+    --t-3: #D25A40;
+    --t-4: #B93A2A;
+    --t-0: #56635F;
+    --t-x: #5E6B68;
+
+    --t-1-wash: #2C201C;
+    --t-2-wash: #31201A;
+    --t-3-wash: #341D17;
+    --t-4-wash: #331A15;
+    --t-0-wash: #1C2423;
+
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.7);
+  }
+
+  /* ── Base ────────────────────────────────────────────────────────────── */
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 24px 96px;
+  }
+
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+  /* ── Masthead ────────────────────────────────────────────────────────── */
+  .masthead { padding: 56px 0 32px; }
+  .masthead h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: .98;
+    font-size: clamp(38px, 7vw, 68px);
+    margin: 14px 0 0;
+    text-wrap: balance;
+    max-width: 20ch;
+  }
+  .masthead h1 .thin {
+    display: block;
+    font-weight: 300;
+    color: var(--ink-2);
+    letter-spacing: -.02em;
+  }
+  .lede {
+    font-family: var(--font-serif);
+    font-size: clamp(17px, 2vw, 20px);
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 62ch;
+    margin: 22px 0 0;
+  }
+  .lede strong { color: var(--ink); font-weight: 600; }
+  .stamp {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-top: 26px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .stamp span { display: inline-flex; align-items: center; gap: 7px; }
+  .stamp span::before {
+    content: "";
+    width: 14px;
+    height: 2px;
+    background: var(--lime);
+  }
+
+  /* ── Stat tiles ──────────────────────────────────────────────────────── */
+  /* Hairline ring per tile rather than a coloured container behind 1px gaps —
+     a half-filled last row then stays page-coloured instead of showing a slab. */
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--page);
+  }
+  .tile {
+    padding: 22px 20px 20px;
+    box-shadow: 0 0 0 1px var(--rule);
+  }
+  .tile-v {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 42px;
+    letter-spacing: -.04em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .tile-k {
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .tile-d { margin-top: 4px; font-size: 13px; color: var(--ink-2); }
+  .tile.is-crit .tile-v { color: var(--t-4); }
+
+  /* ── Section shell ───────────────────────────────────────────────────── */
+  section { padding-top: 64px; scroll-margin-top: 104px; }
+  .sec-head { margin-bottom: 22px; }
+  .sec-head h2 {
+    font-family: var(--font-display);
+    font-weight: 750;
+    font-size: clamp(22px, 3vw, 30px);
+    letter-spacing: -.022em;
+    margin: 8px 0 0;
+    text-wrap: balance;
+  }
+  .sec-head p {
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    color: var(--ink-2);
+    max-width: 66ch;
+    margin: 10px 0 0;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+  }
+
+  /* ── Toolbar ─────────────────────────────────────────────────────────── */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--page) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 0;
+  }
+  .toolbar-in {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+  .search {
+    flex: 1 1 210px;
+    min-width: 170px;
+    font: inherit;
+    font-size: 14px;
+    padding: 8px 12px;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--rule-2);
+    border-radius: 3px;
+  }
+  .search::placeholder { color: var(--ink-3); }
+  select.ctl {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 8px 10px;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--rule-2);
+    border-radius: 3px;
+    min-width: 0;
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--rule-2);
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .chip[aria-pressed="true"] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--page);
+  }
+  .chip[data-lvl="kritisch"] .dot { background: var(--t-4); }
+  .chip[data-lvl="hoch"] .dot { background: var(--t-3); }
+  .chip[data-lvl="mittel"] .dot { background: var(--t-2); }
+  .chip[data-lvl="niedrig"] .dot { background: var(--t-1); }
+  .chip[data-lvl="beobachten"] .dot { background: var(--t-0); }
+  .chip[data-lvl="erledigt"] .dot { background: var(--t-x); }
+  .btn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 7px 12px;
+    border-radius: 3px;
+    border: 1px solid var(--rule-2);
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+  .btn:hover, .chip:hover { border-color: var(--ink-3); color: var(--ink); }
+  .btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .hitcount {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--ink-3);
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* ── Matrix ──────────────────────────────────────────────────────────── */
+  .matrix-wrap { padding: 20px 20px 8px; overflow-x: auto; }
+  .matrix { display: block; width: 100%; min-width: 640px; height: auto; }
+  .grid-line { stroke: var(--rule); stroke-width: 1; }
+  .axis-line { stroke: var(--rule-2); stroke-width: 1; }
+  .axis-t { font-family: var(--font-mono); font-size: 10px; fill: var(--ink-3); }
+  .axis-l {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    fill: var(--ink-2);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .quad-l {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    fill: var(--ink-3);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .dot-label {
+    font-family: var(--font-display);
+    font-size: 11.5px;
+    font-weight: 650;
+    fill: var(--ink);
+    paint-order: stroke;
+    stroke: var(--surface);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+  /* Fill carries the threat level; the watchlist reads as an open ring so
+     "not in DACH yet" survives greyscale and colourblindness. */
+  .pt { cursor: pointer; transition: opacity .18s ease; }
+  .pt circle.mark { fill: var(--c); stroke: var(--surface); stroke-width: 2; }
+  .pt.is-watch circle.mark { fill: var(--surface); stroke: var(--c); }
+  .pt.is-dim { opacity: .1; pointer-events: none; }
+  .pt:hover circle.mark, .pt:focus-visible circle.mark { stroke: var(--ink); }
+  .pt-hit { fill: transparent; }
+
+  .tip {
+    position: fixed;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(3px);
+    transition: opacity .12s ease;
+    background: var(--surface);
+    border: 1px solid var(--rule-2);
+    border-radius: 3px;
+    box-shadow: var(--shadow);
+    padding: 10px 12px;
+    max-width: 270px;
+    font-size: 13px;
+  }
+  .tip.on { opacity: 1; transform: none; }
+  .tip-n { font-family: var(--font-display); font-weight: 700; letter-spacing: -.01em; }
+  .tip-r {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-2);
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .tip-hr { height: 1px; background: var(--rule); margin: 7px 0; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    padding: 14px 20px 18px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend i {
+    width: 11px; height: 11px; border-radius: 50%;
+    display: inline-block; flex: none;
+  }
+  .legend i.ring { background: var(--surface); border: 2px solid var(--ink-3); }
+  .legend i.diam { border-radius: 2px; transform: rotate(45deg); background: var(--accent); box-shadow: 0 0 0 2px var(--lime); }
+
+  .note {
+    font-family: var(--font-serif);
+    font-size: 14.5px;
+    color: var(--ink-2);
+    max-width: 74ch;
+    margin: 16px 0 0;
+  }
+  .note code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: var(--ink);
+  }
+
+  /* ── Ranked bars ─────────────────────────────────────────────────────── */
+  .rank { padding: 8px 20px 20px; }
+  .rank-row {
+    display: grid;
+    grid-template-columns: 22px minmax(120px, 210px) 1fr 42px;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 9px 2px;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+  }
+  .rank-row:last-child { border-bottom: 0; }
+  .rank-row:hover { background: var(--surface-2); }
+  .rank-i { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .rank-n { font-weight: 620; letter-spacing: -.01em; font-size: 14px; }
+  .rank-n small {
+    display: block;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 10.5px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .rank-track { height: 14px; background: var(--surface-2); border-radius: 2px; overflow: hidden; }
+  .rank-fill { height: 100%; border-radius: 0 4px 4px 0; }
+  .rank-s {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  /* ── Dossier cards ───────────────────────────────────────────────────── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+    gap: 14px;
+    align-items: start;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--lvl);
+    border-radius: 3px;
+    overflow: hidden;
+    scroll-margin-top: 96px;
+  }
+  .card.is-target { box-shadow: 0 0 0 2px var(--accent); }
+  .card.is-dead { border-left-color: var(--t-x); }
+  .card.is-dead .card-name { text-decoration: line-through; text-decoration-color: var(--ink-3); }
+
+  .card-head {
+    display: block;
+    width: 100%;
+    background: none;
+    border: 0;
+    padding: 15px 16px;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+  }
+  .card-head:hover { background: var(--surface-2); }
+  .card-top { display: flex; align-items: flex-start; gap: 12px; }
+  .card-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -.018em;
+    line-height: 1.2;
+    flex: 1;
+  }
+  .star { color: var(--lime-ink); font-size: 12px; vertical-align: 2px; }
+  .score-box { text-align: right; flex: none; }
+  .score-v {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .score-l {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+  }
+  .score-l::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--lvl);
+    flex: none;
+  }
+  .meter { height: 4px; background: var(--surface-2); border-radius: 2px; margin: 12px 0 11px; overflow: hidden; }
+  .meter i { display: block; height: 100%; background: var(--lvl); border-radius: 0 3px 3px 0; }
+  .card-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+  .card-why {
+    font-family: var(--font-serif);
+    font-size: 14.5px;
+    color: var(--ink-2);
+    margin-top: 9px;
+  }
+  .tagrow { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 11px; }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 2px;
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    color: var(--ink-2);
+  }
+  .tag.hot { background: var(--t-3-wash); border-color: var(--t-3); color: var(--ink); }
+  .expander {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .expander .caret { transition: transform .2s ease; display: inline-block; }
+  .card-head[aria-expanded="true"] .caret { transform: rotate(90deg); }
+
+  .card-body { border-top: 1px solid var(--rule); padding: 16px; display: none; }
+  .card-body.open { display: block; }
+  .blk + .blk { margin-top: 16px; }
+  .blk-h {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 9px;
+  }
+  .blk ul { margin: 0; padding-left: 17px; }
+  .blk li { margin: 4px 0; font-size: 14px; }
+  .blk li::marker { color: var(--t-2); }
+  .attack {
+    background: var(--surface-2);
+    border-left: 2px solid var(--lime);
+    padding: 11px 13px;
+    font-family: var(--font-serif);
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+  .attack b {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--lime-ink);
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  .subscores { display: grid; gap: 8px; }
+  .ss { display: grid; grid-template-columns: 120px 1fr 26px; gap: 10px; align-items: center; }
+  .ss-k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+  .ss-t { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+  .ss-f { height: 100%; background: var(--ink-2); border-radius: 0 3px 3px 0; }
+  .ss-v { font-family: var(--font-mono); font-size: 11.5px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  .src {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    margin-top: 14px;
+    word-break: break-all;
+  }
+  .sec-empty {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-3);
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* ── Table view ──────────────────────────────────────────────────────── */
+  .tablewrap { overflow-x: auto; padding: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+  }
+  td.n { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .lvlpill {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 2px;
+    white-space: nowrap;
+    border: 1px solid var(--lvl);
+    background: var(--lvl-wash);
+    color: var(--ink);
+  }
+  [hidden] { display: none !important; }
+
+  /* ── Fazit ───────────────────────────────────────────────────────────── */
+  .fazit { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 14px; }
+  .fz {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--lime);
+    border-radius: 3px;
+    padding: 20px;
+  }
+  .fz-i {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    color: var(--lime-ink);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+  .fz-h { font-family: var(--font-display); font-weight: 720; font-size: 16px; letter-spacing: -.015em; margin-bottom: 7px; text-wrap: balance; }
+  .fz-p { font-family: var(--font-serif); font-size: 15px; color: var(--ink-2); }
+
+  footer {
+    margin-top: 72px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+  }
+
+  @media (max-width: 640px) {
+    .rank-row { grid-template-columns: 20px 1fr 34px; }
+    .rank-track { display: none; }
+    .ss { grid-template-columns: 96px 1fr 26px; }
+    .masthead { padding-top: 36px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+
+  .rise { animation: rise .5s cubic-bezier(.2,.7,.3,1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+</style>
+
+<header class="wrap masthead">
+  <div class="eyebrow">Wettbewerbsanalyse · AI Role-Play &amp; Sales Training · DACH</div>
+  <h1>Wer euch wirklich<span class="thin">gefährlich wird.</span></h1>
+  <p class="lede">
+    77 Anbieter aus dem Report, bewertet nach <strong>Nähe zum eigenen Angebot</strong>,
+    <strong>Schlagkraft</strong> und <strong>Zugang zum DACH-Budget</strong>.
+    Die Pure-Play-Startups sind sichtbar — die eigentliche Gefahr sitzt bei denen,
+    die den Rahmenvertrag schon haben und Role-Play einfach dazulegen.
+  </p>
+  <div class="stamp">
+    <span>Stand 11.08.2026</span>
+    <span>Quelle: Firmen-Websites, OMR Reviews, Presse</span>
+    <span>Sortiert nach Nähe zum eigenen Angebot</span>
+  </div>
+</header>
+
+<div class="tiles" id="tiles"></div>
+
+<div class="toolbar">
+  <div class="toolbar-in">
+    <input class="search" id="q" type="search" placeholder="Anbieter, Merkmal oder Ort suchen …" aria-label="Anbieter suchen">
+    <div class="chips" id="lvlchips" role="group" aria-label="Nach Bedrohungsstufe filtern"></div>
+    <select class="ctl" id="cat" aria-label="Nach Gruppe filtern"></select>
+    <select class="ctl" id="sort" aria-label="Sortierung">
+      <option value="score">Sortierung: Score</option>
+      <option value="name">Sortierung: Name</option>
+      <option value="naehe">Sortierung: Nähe</option>
+    </select>
+    <button class="btn" id="expandAll" type="button">Alle aufklappen</button>
+    <button class="btn" id="tableBtn" type="button" aria-pressed="false">Tabelle</button>
+    <span class="hitcount" id="hits"></span>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section id="matrix-sec">
+    <div class="sec-head">
+      <div class="eyebrow">01 · Bedrohungsmatrix</div>
+      <h2>Rechts oben wird es teuer</h2>
+      <p>
+        Waagerecht: wie nah das Produkt an KI-Rollenspiel für Sales liegt. Senkrecht:
+        wie gut sie es in DACH durchsetzen können — Kapital, Distribution, bestehender
+        Budgetzugang. Punkt anklicken öffnet das Dossier.
+      </p>
+    </div>
+    <div class="panel">
+      <div class="matrix-wrap"><svg class="matrix" id="mx" role="img"
+        aria-label="Streudiagramm: Nähe zum Angebot gegen Durchsetzungskraft in DACH für alle Wettbewerber"></svg></div>
+      <div class="legend">
+        <span><i style="background:var(--t-4)"></i> Kritisch</span>
+        <span><i style="background:var(--t-3)"></i> Hoch</span>
+        <span><i style="background:var(--t-2)"></i> Mittel</span>
+        <span><i style="background:var(--t-1)"></i> Niedrig</span>
+        <span><i style="background:var(--t-0)"></i> Beobachten</span>
+        <span><i class="ring"></i> Watchlist, noch nicht in DACH</span>
+        <span><i class="diam"></i> Eure Position</span>
+      </div>
+    </div>
+    <p class="note">
+      Der Score ist eine Lesart dieses Reports, keine Messung:
+      <code>Score = Nähe × 3,8 + Kraft × 3,0 + Zugang × 3,2</code>, alle Achsen 0–10.
+      Wo der Report ein Urteil ausspricht („größte Bedrohung“, „beobachten, nicht
+      fürchten“), sind die Achsen daran ausgerichtet. Punkte mit identischen Werten
+      sind minimal versetzt gezeichnet, damit keiner unter einem anderen verschwindet.
+      Die Rauten-Markierung ist eine Orientierungshilfe, kein bewerteter Eintrag.
+      Gruppe H (tot/übernommen) ist aus der Matrix ausgenommen.
+    </p>
+  </section>
+
+  <section id="rank-sec">
+    <div class="sec-head">
+      <div class="eyebrow">02 · Rangliste</div>
+      <h2>Die 16 dringendsten Namen</h2>
+      <p>Zeile anklicken springt ins Dossier. Reagiert auf Suche und Filter.</p>
+    </div>
+    <div class="panel"><div class="rank" id="rank"></div></div>
+  </section>
+
+  <section id="table-sec" hidden>
+    <div class="sec-head">
+      <div class="eyebrow">Tabellenansicht</div>
+      <h2>Alle Werte als Tabelle</h2>
+      <p>Dieselben Daten wie Matrix und Karten, ohne Farbcodierung.</p>
+    </div>
+    <div class="panel tablewrap" id="tablehost"></div>
+  </section>
+
+  <section id="cards-sec">
+    <div class="sec-head">
+      <div class="eyebrow">03 · Dossiers</div>
+      <h2>Alle Anbieter, gruppiert</h2>
+      <p>Karte anklicken zeigt Kernfunktionen, Positionierung und den Angriffspunkt.</p>
+    </div>
+    <div id="sections"></div>
+  </section>
+
+  <section id="fazit-sec">
+    <div class="sec-head">
+      <div class="eyebrow">04 · Kurzfazit</div>
+      <h2>Sieben Sätze, die den Report zusammenhalten</h2>
+    </div>
+    <div class="fazit" id="fazit"></div>
+  </section>
+
+  <footer>
+    <span>Wettbewerbsübersicht · Stand 11.08.2026</span>
+    <span>77 Anbieter · 9 Gruppen</span>
+    <span>Bewertung = Lesart des Reports</span>
+  </footer>
+</main>
+
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  /* ── Data ─────────────────────────────────────────────────────────────
+     n = Nähe zum eigenen Angebot (AI Role-Play für Sales)
+     k = Kraft: Kapital, Größe, Analystendeckung, die sie auf dieses Feld richten
+     z = Zugang: DACH-Präsenz, Datensouveränität, bestehende Kundenbeziehung
+  */
+  const CATS = [
+    ["A1", "Direkte Wettbewerber DACH — Pure Play Role-Play", "Gleiches Produkt, gleicher Markt, gleicher Pitch. Hier trifft man sich im Deal."],
+    ["A2", "Internationale Player, die in DACH real vorkommen", "Mit deutscher Website, EU-Hosting oder Analystendeckung — sie stehen mit auf der Shortlist."],
+    ["B", "DACH-Incumbents, die Role-Play nachrüsten", "Kommerziell die gefährlichere Gruppe: Sie sitzen bereits auf dem Budget und dem Rahmenvertrag."],
+    ["C", "Angrenzende DACH-Anbieter ohne Role-Play", "Heute kein Rollenspiel — aber eine Produktentscheidung davon entfernt."],
+    ["D", "Sales-Plattformen mit Role-Play als Modul", "Rollenspiel als Feature einer größeren Plattform. Gewinnen über Bündelung, nicht Tiefe."],
+    ["E", "Angrenzend — andere Zielgruppe", "Gleiche Technik, anderer Buyer: Contact Center, Führung, Finanzberatung, Pharma."],
+    ["F", "Watchlist — international, jung, noch nicht in DACH", "Kein akutes Deal-Risiko, aber Produkt- und Preisdruck. Kurz gehalten."],
+    ["G", "Nicht im gleichen Markt — Skill- und Lernplattformen", "Tauchen in Recherchen auf, konkurrieren aber nicht um denselben Kauf."],
+    ["H", "Nicht mehr relevant — tot, übernommen, rebranded", "Für die Akte: hier muss niemand mehr Wettbewerbsargumente bauen."]
+  ];
+
+  const D = [
+    /* ── A1 ─────────────────────────────────────────────────────────── */
+    { c:"A1", name:"Retorio", star:"Marktführer DACH", url:"https://www.retorio.com/de",
+      meta:"München (+ Wien) · TUM-Spinoff · 9 Mio. € Series A (Nov 2023: Squareone, Porsche Ventures, Storm Ventures)",
+      n:10, k:6, z:9, tags:["Pure Play","Enterprise","Verhaltensdaten","14 Sprachen"],
+      why:"Ältester Anbieter im Feld, echte Enterprise-Logos, das meiste Kapital in DACH. Der Platzhirsch, gegen den ihr gemessen werdet.",
+      funcs:["Fotorealistische KI-Avatare für Verkaufsrollenspiele","Multimodale Analyse: verbal, vokal, visuell","14 Sprachen, Tracks für Sales, Service, Leadership","Behavioral Scoring auf „Warmth & Competence“"],
+      pos:["„Pionier im KI-Verkaufscoaching“ — ältester Anbieter im Feld (seit 2018)","Verhaltenswissenschaft statt generischem LLM-Rollenspiel","Enterprise-Referenzen in Automotive, Versicherung, Pharma, Telko","Seit Nov 2023 keine neue Runde — Raise oder Pivot ist plausibel"],
+      atk:"Seit November 2023 keine Runde. Ein Anbieter im Raise- oder Pivot-Fenster ist im Deal langsam und beim Preis nervös." },
+
+    { c:"A1", name:"Setero", url:"https://www.setero.io/", meta:"Deutschland",
+      n:10, k:3, z:8, tags:["Pure Play","EU-Hosting","ISO 27001 i.A.","Self-Training"],
+      why:"Featureseitig fast deckungsgleich mit euch, inklusive EU-Infrastruktur-Argument und Mittelstands-Logos.",
+      funcs:["KI-Rollenspiele für Vertriebs- und Servicegespräche","Trainings aus eigenen Dokumenten per Chat erzeugen (~60 Sek.)","Automatisiertes, strukturiertes Feedback nach jeder Session","Dashboards für Team und Einzelperson"],
+      pos:["Europäische Infrastruktur, EU-Hosting, DSGVO, ISO 27001 in Arbeit","Entlastet Führungskräfte: Selbsttraining statt Manager-Coaching","Pain-Framing: 87 % Wissensverlust nach Einzeltrainings","Logos: KiKxxl, Sanity Group, EURODUNA, bidi Bildung"],
+      atk:"ISO 27001 erst „in Arbeit“ und wenig Kapital. In Enterprise-Audits und bei Mehrjahresverträgen ist das eine offene Flanke." },
+
+    { c:"A1", name:"emerse.ai", url:"https://www.emerse.ai/", meta:"Deutschland",
+      n:10, k:3, z:8, tags:["Pure Play","Video-Avatare","20+ Module","Ex-VR"],
+      why:"Breiteste Szenario-Bibliothek im deutschen Feld — der Vergleich läuft über Modulzahl, und da liegen sie vorn.",
+      funcs:["KI-Rollenspiele mit lebensechten Video-Avataren, browserbasiert","Personalisiertes Coaching-Feedback nach ca. 30-Min-Session","20+ Module: SPIN, MEDDICC, Cold Calling, Einwände","Auch Leadership-, Einkaufs- und HR-Szenarien"],
+      pos:["„Built in Germany. Trusted by leading European companies“","Breiteste Szenario-Bibliothek im deutschen Feld","Repositioniert von VR-Softskills-Training auf AI Role-Play","Alte VR-Claims noch auf der Seite: 75 % effektiver, 64 % günstiger"],
+      atk:"Ein Pivot mit sichtbaren Nahtstellen: alte VR-Claims stehen noch auf der Seite. Fokus- und Substanzfrage ist legitim." },
+
+    { c:"A1", name:"Fioro", url:"https://www.fioro.ai/de/", meta:"München · gegründet 2024",
+      n:10, k:3, z:8, tags:["Pure Play","Außendienst","ISO 27001","DORA-ready"],
+      why:"Deckt Prep, Live-Call und Debrief ab und ist im Außendienst/D2C stark verankert — genau dort, wo Volumen liegt.",
+      funcs:["KI-Rollenspiele mit realistischen Kundenpersonas","Coaching-Module: Einwandbehandlung, Pitch, Produktwissen","Deal-Tracking, Pipeline-Review, Meeting-Vorbereitung","Strukturierte Trainingspläne, Scoring, Fortschritt"],
+      pos:["Deckt den ganzen Sales-Zyklus ab: Prep, Live-Call, Debrief","Stark im Außendienst / D2C: Solar, Fertighaus, Baufinanzierung","ISO 27001, DSGVO, EU-Hosting, DORA-ready","Logos: ARAG, Moderna, EKD Solar, Baufi24"],
+      atk:"Sehr breit für ein 2024er Team. Wo sie den ganzen Zyklus abdecken, ist keine Schicht tief — Szenariotiefe schlägt Feature-Liste." },
+
+    { c:"A1", name:"Sleak AI", url:"https://sleak.ai/", meta:"München · gegründet 2024 · ca. 3 FTE",
+      n:10, k:2, z:9, tags:["Pure Play","Enterprise-Logos","25+ Sprachen","Kanal über DIV"],
+      why:"Referenzen weit über eigener Größe: KUKA, Würth mit 5.000+ Seats, Schwäbisch Hall. Und über das DIV-Institut ein eigener Kanal.",
+      funcs:["KI-Gesprächssimulationen für geschäftskritische Szenarien","Knowledge-Coaching auf Basis eigener Unterlagen und Playbooks","Manager-Dashboards mit Fortschritt und Performance","Recruiting-/Talent-Assessment-Modul, 25+ Sprachen"],
+      pos:["Enterprise-Kontextualisierung: lernt Begriffe, Produkte, Playbooks","Breiter Scope: Sales, Leadership, Einkauf, Service","Compliance-first: ISO 27001, DSGVO, EU AI Act","Referenzen: KUKA, Würth (5.000+ Seats), Schwäbisch Hall","Sehr wenig Kapital — wahrscheinlicher Übernahmekandidat"],
+      atk:"Drei Vollzeitkräfte gegen Würth-Volumen. Delivery- und Fortführungsrisiko ist ein sachliches Argument, und sie sind Übernahmekandidat." },
+
+    { c:"A1", name:"Vertriebs AI", url:"https://vertriebs-ai.de/", meta:"Hamburg (MW Software GbR) · bootstrapped",
+      n:9, k:2, z:8, tags:["Preisdruck","Nutzungsbasiert","EU-Hosting","OMR 4,9"],
+      why:"Rund 17 € pro Trainingsstunde statt Seat-Lizenz — das greift euer Preismodell frontal an, und OMR-Bestnote verstärkt es.",
+      funcs:["Rollenspiel für Outbound, Inbound und Video-Außendiensttermine","Analyse echter Call-Transkripte mit Scorecards","Adaptive Drills, die aus Schwachstellen erzeugt werden","Team-Dashboard, eigene Bewertungsraster"],
+      pos:["Radikal transparente Preise: ca. 17 € pro Trainingsstunde statt Seat-Lizenz","EU-Hosting, DSGVO, gebaut für deutsche Teams ab 5 Personen","Bestbewertet in der OMR-Kategorie „AI Sales Roleplay“ (4,9)","Achtung: nutzungsbasiertes Pricing greift Seat-Modelle frontal an"],
+      atk:"Nutzungspreise skalieren nach unten, nicht nach oben. Bei echtem Rollout wird es teuer und unplanbar — dort liegt euer Gegenargument." },
+
+    { c:"A1", name:"careertrainer.ai", url:"https://careertrainer.ai/", meta:"Baden (AT) · Server in Deutschland · bootstrapped",
+      n:9, k:2, z:8, tags:["Preisdruck","White-Label","SEO-Maschine","Voice-first"],
+      why:"Ab ca. 19 €/Monat, dominiert die deutschen Suchergebnisse und bewaffnet per White-Label genau die Trainer, die sonst bei euch kaufen.",
+      funcs:["Voice-first KI-Rollenspiel, 50+ Szenarien, 50+ Personas","Szenario-Generator für eigene Situationen","Echtzeit-Scoring mit wörtlichen Zitaten aus dem Transkript","Team-Dashboards, Lernpfade, White-Label für Trainer"],
+      pos:["Self-Serve ab ca. 19 €/Monat — unterbietet Enterprise-Preise deutlich","Breiter als Sales: Führung, Verhandlung, Service","Aggressive SEO-/Content-Maschine, dominiert deutsche Suchergebnisse","White-Label bewaffnet genau die Trainer, die sonst kaufen würden"],
+      atk:"Self-Serve-Preise heißen Self-Serve-Betreuung. Kein Enterprise-Onboarding, keine Rollout-Begleitung, kein Betriebsrats-Support." },
+
+    { c:"A1", name:"LoopAI", url:"https://loop-ai.de/", meta:"München · Marke von Umsatzlust",
+      n:9, k:2, z:6, tags:["Mittelstand","Gamification","Made in Germany"],
+      why:"Solides Mittelstands-Angebot mit Verhaltenslern-Framing, aber ohne eigenständige Marktposition.",
+      funcs:["KI-Kundenavatare für Verkaufssimulationen","Objektives Echtzeit-Feedback zur Technik","Szenarien auf Produkte des Kunden zugeschnitten","Gamification: Scores, Level, anonymes Coaching"],
+      pos:["„Made in Germany“, verhaltenslernbasiertes Framing","Claims: 8× Wirksamkeit, −38 % Onboarding-Zeit","Mittelstand und beratungsintensive Branchen"],
+      atk:"Marke einer Trainingsfirma, nicht eigenständiges Produktunternehmen. Claims wie „8× Wirksamkeit“ sind unbelegt und angreifbar." },
+
+    { c:"A1", name:"KI Vertriebstrainer", url:"https://www.kivertriebstrainer.de/", meta:"track GmbH · Deutschland",
+      n:9, k:2, z:8, tags:["On-Prem","EU AI Act","Eigenes RAG","Vertikal"],
+      why:"„Daten verlassen nie das Haus“ plus On-Prem-Deployment. Überall gefährlich, wo Datenhoheit die Entscheidung trifft.",
+      funcs:["Gamifiziertes Rollenspiel, 4 Kategorien × 5 Schwierigkeitsgrade","Live-Coaching während echter Telefonate","Eigenes RAG, auf Kundeninfrastruktur deploybar","Transkription plus Erkennung der Gesprächsphase"],
+      pos:["DSGVO und EU AI Act als Leitargument","On-Prem / Datensouveränität: „Daten verlassen nie das Haus“","Vertikale Module: Versicherung, Finanzen, Gesundheit, Industrie","Gefährlich überall dort, wo Datenhoheit die Entscheidung trifft"],
+      atk:"On-Prem heißt langsame Modell-Updates und teure Wartung. Wer selbst hostet, hat in zwölf Monaten das schlechtere Sprachmodell." },
+
+    { c:"A1", name:"TALKMEISTER", url:"https://talkmeister.de/", meta:"Deutschland · Daten in Frankfurt",
+      n:9, k:2, z:7, tags:["Laufzeitlizenz","Trainingshäuser","Deutschsprachig"],
+      why:"Verkauft über klassische deutsche Trainingshäuser wie INtem — sie kaufen den Kanal, nicht den Endkunden.",
+      funcs:["Deutschsprachiges KI-Rollenspiel, dynamisch statt geskriptet","Kaltakquise, Preisverhandlung, Einwände, Abschluss","Kennzahlen und Feedback nach dem Gespräch, Micro-Trainings","Browserbasiert, keine Installation"],
+      pos:["Explizit für den deutschsprachigen Markt gebaut","Laufzeitlizenz (ca. 1.849–2.398 € für 6–12 Monate) statt Seat-Preis","Vertrieb über klassische deutsche Trainingshäuser (u. a. INtem)"],
+      atk:"Laufzeitlizenz ohne Seat-Bezug bricht bei größeren Teams. Und der Kanal begrenzt sie auf das Tempo der Trainingshäuser." },
+
+    { c:"A1", name:"SalesPack.AI", url:"https://www.salespack.ai/", meta:"Deutschland",
+      n:9, k:2, z:6, tags:["Conversation Intelligence","Händlernetze","HubSpot/Teams"],
+      why:"Kombiniert Gesprächsanalyse echter Calls mit Rollenspiel — dasselbe Argument, das Gong groß gemacht hat, nur deutsch.",
+      funcs:["Verkaufssimulationen mit menschenähnlichen KI-Avataren","Sprachanalyse und Mustererkennung über echte Team-Calls","Automatische Einwanderkennung mit Konter-Vorschlägen","Zentrale Gesprächsdatenbank, Team-Scorecards, HubSpot/Teams"],
+      pos:["„Jeder verkauft wie der Beste im Team“","Kombiniert Conversation Intelligence mit Rollenspiel","Zielt auf Händler-/Partnernetze und onboarding-lastige Organisationen"],
+      atk:"Zwei Produkte auf einmal mit kleinem Team. Beide Hälften bleiben dünner als die jeweiligen Spezialisten." },
+
+    { c:"A1", name:"Trainexus", url:"https://www.trainexus.de/", meta:"Bayreuth · Uni-Spinoff · Hosting bei Hetzner",
+      n:8, k:2, z:6, tags:["Preisdruck","30 €/h","Videoanalyse","300+ Szenarien"],
+      why:"Stundenpreis statt Lizenz und Videoanalyse inklusive. Noch nicht auf Sales fokussiert — das kann sich schnell ändern.",
+      funcs:["Echtzeit-Dialogsimulation mit KI-Avataren","PromptStudio: No-Code-Szenarioerstellung","Optionale Videoanalyse: Tonfall, Mimik, Körpersprache","300+ Szenarien inkl. Business und Compliance"],
+      pos:["Forschungsbasiert, deutsches Hosting, Session-Löschung","Stundenpreis (ca. 30 €/h) statt Lizenz — ungewöhnliches Modell","Schwerpunkt Bildung, Gesundheit, Prüfungsvorbereitung — noch nicht Sales"],
+      atk:"Schwerpunkt liegt bei Bildung und Prüfungsvorbereitung. Solange kein Sales-Fokus da ist, fehlt Methodik- und Umsatzbezug." },
+
+    { c:"A1", name:"3spin Learning", url:"https://www.3spin-learning.com/de", meta:"Deutschland · TÜV NORD Group",
+      n:7, k:6, z:9, tags:["VR/AR","TÜV NORD","Blue-Chip-Logos","No-Code"],
+      why:"Konzernmutter TÜV NORD, Lufthansa- und BASF-Logos und ein eigenes Sales-Modul. Kommt über Vertrauen und Einkaufsfreigabe, nicht über Produkt.",
+      funcs:["KI-Avatare für Rollenspiel in VR/AR und im Browser","No-Code-Autorentool für immersive Trainings","Eigenes Sales-Modul: Einwände, Verhandlung, Abschluss","Multi-Device: Headset, AR-Brille, Desktop"],
+      pos:["Immersiv/VR als Differenzierer, TÜV-Konzern als Vertrauenssignal","DSGVO-Maximalposition, „made in Germany“","Blue-Chip-Logos: Lufthansa, Pfizer, Boehringer, Zurich, DB, BASF, E.ON"],
+      atk:"VR ist Hardware-Reibung und tötet die tägliche Übungsroutine. Ihr gewinnt über Frequenz: Browser, 10 Minuten, jeden Tag." },
+
+    { c:"A1", name:"Sales Karate", url:"https://saleskarate.de/", meta:"Heldenschmiede GmbH · Deutschland",
+      n:8, k:1, z:5, tags:["Curriculum","Gamification","Kleine Teams"],
+      why:"Kampfsport-Curriculum mit täglicher Routine und Spaced Repetition — didaktisch das durchdachteste Kleinangebot.",
+      funcs:["KI-Sparringspartner für Gesprächsübungen","„Kumite“ Sparring, „Dojo“ Drills, „Kata“ Spaced Repetition","8 Gürtelstufen, 107 Lektionen über ca. ein Jahr","Kompetenz-Dashboard je Vertriebsphase"],
+      pos:["Gamifiziertes Kampfsport-Curriculum, tägliche Übungsroutine","Positioniert gegen teure Ein-Tages-Seminare","Kleine Vertriebsteams, niedriger Preispunkt"],
+      atk:"Festes Curriculum lässt sich nicht auf Kundenprodukte und Playbooks kontextualisieren. Im Enterprise ist das ein Ausschlusskriterium." },
+
+    { c:"A1", name:"ScreenCoach", url:"https://screencoach.de", meta:"Deutschland",
+      n:7, k:1, z:3, tags:["Sehr früh","Free Tier","Deutsches Hosting"],
+      why:"Sehr früh, null OMR-Bewertungen. Beobachten, nicht fürchten.",
+      funcs:["KI-Sales-Coaching und Rollenspiel","Kategorisiert unter Sales Training und Onboarding","Deutschsprachiger Support, Free Tier"],
+      pos:["Deutsches Hosting, EU-Datenschutz","Sehr früh, 0 Bewertungen auf OMR — beobachten, nicht fürchten"],
+      atk:"Keine Referenzen, keine Bewertungen. Taucht in Deals höchstens als Preisanker auf." },
+
+    { c:"A1", name:"Coachify", url:"https://getcoachify.com/", meta:"vermutlich USA",
+      n:7, k:1, z:1, tags:["Einzel-Rep","Landingpage","Keine Preise"],
+      why:"Zielt auf den einzelnen Rep, nicht aufs Unternehmen. Landingpage-Niveau.",
+      funcs:["KI-Sales-Coach zum Üben von Verkaufsgesprächen","Live-Dialogsimulation, „AI that talks back“","Einwandbehandlung, Pitch-Schliff, Abschlusstraining"],
+      pos:["Einzelner Rep als Zielgruppe, nicht Enterprise","Sehr früh: keine Preise, keine Logos — Landingpage-Niveau"],
+      atk:"Keine Preise, keine Logos, kein deutscher Bezug. Kein Deal-Risiko." },
+
+    /* ── A2 ─────────────────────────────────────────────────────────── */
+    { c:"A2", name:"Gong", star:"Größte Bedrohung im Enterprise", url:"https://www.gong.io/de/",
+      meta:"Gong Enable / AI Trainer · 583 Mio. $ Funding · ~500 Mio. $ ARR · 1.200+ Mitarbeitende",
+      n:7, k:10, z:9, tags:["Datenmoat","EU-Rechenzentrum","Deutsche Website","70+ Sprachen"],
+      why:"Sitzt in fast jedem Enterprise-Deal mit am Tisch — und kann Rollenspiel jederzeit kostenlos dazupacken, weil die Gesprächsdaten schon da sind.",
+      funcs:["Conversation Intelligence über alle Calls und Mails","Gong Enable mit AI Trainer für Rollenspiel","Forecasting, Deal Intelligence, Gong Agents","Transkription und Analyse in 70+ Sprachen"],
+      pos:["„Revenue AI OS“ — Rollenspiel auf echten Gesprächen geerdet","Datenmoat: Szenarien aus tatsächlich gewonnenen und verlorenen Deals","Landet über CI, expandiert danach ins Enablement","Deutsche Website, EU-Rechenzentrum, große DACH-Basis"],
+      atk:"Rollenspiel ist bei Gong ein Nebenprodukt der Analyse. Angreifbar über Szenariotiefe und deutschsprachige Gesprächsqualität — nie über Plattformbreite." },
+
+    { c:"A2", name:"Seismic", url:"https://seismic.com/de/",
+      meta:"Seismic Learning + Aura Role-Play Agent · ca. 3 Mrd. $ Bewertung · ~400 Mio. $ ARR · Permira/Ares",
+      n:6, k:9, z:8, tags:["Enablement Cloud","Reguliert/FS","Deutsche Website","Aura seit 6/2025"],
+      why:"Gleicher Buyer wie ihr, besonders in Versicherung und Financial Services. Verkauft „eine Cloud statt Punktlösungen“ — und ihr seid die Punktlösung.",
+      funcs:["Content-Management plus Digital Sales Rooms","Seismic Learning (ehemals Lessonly) als LMS/Coaching","Aura AI Role-Play Agent (Launch Juni 2025)","Meeting Intelligence und Analytics"],
+      pos:["Eine „Enablement Cloud“ ersetzt Punktlösungen","Rollenspiel an freigegebene Inhalte und Messaging gekoppelt","Stark in regulierten FS-/Versicherungskunden — gleiche Buyer wie ihr","Deutsche Website, EMEA-Präsenz, Role-Play noch junge Teilfunktion"],
+      atk:"Aura ist seit Juni 2025 live — eine junge Teilfunktion in einer Content-Plattform. Der Reifegrad-Vergleich läuft klar zu euren Gunsten." },
+
+    { c:"A2", name:"Second Nature AI", url:"https://secondnature.ai",
+      meta:"Israel · ca. 47 Mio. $ · Series B 22 Mio. $ (Okt 2025) · Zoom-backed",
+      n:10, k:6, z:7, tags:["Pure Play","EU-Daten (NL)","25–30 Sprachen","Zertifizierung"],
+      why:"Der DACH-taugliche internationale Pure-Play: Deutsch dabei, EU-Datenhaltung in den Niederlanden, frisches Series-B-Kapital.",
+      funcs:["Konversationelle KI-Avatare für Verkaufsrollenspiele","Discovery, Cold Call, Einwandbehandlung, Multi-Persona","Zertifizierungsprogramme mit Gamification","LMS-/CRM-/SSO-Integrationen"],
+      pos:["„Training → GTM Execution“, nicht nur Üben","Claims: 34 % kürzeres Ramp-up, 46 % mehr Abschlüsse","Deutsch unter 25–30 Sprachen, EU-Datenhaltung in den Niederlanden","Der DACH-tauglichste internationale Pure-Play"],
+      atk:"Deutsch ist eine von 30 Sprachen, kein Heimatmarkt. Kein DACH-Standort, keine deutschsprachige Rollout-Begleitung, keine Betriebsrats-Erfahrung." },
+
+    { c:"A2", name:"Hyperbound", url:"https://www.hyperbound.ai",
+      meta:"15 Mio. $ Series A (Sep 2025, Peak XV) · ~50 Mitarbeitende",
+      n:10, k:7, z:4, tags:["PLG","MEDDPICC","25+ Sprachen","Keine EU-Residenz"],
+      why:"Stärkste Produktmarke der Kategorie und massives Bottom-up-Wachstum. Reps bringen es selbst ins Unternehmen.",
+      funcs:["KI-Käufer-Rollenspiele (Practice)","Bewertung echter Calls gegen MEDDPICC etc. (Perform)","Kota Activate Coaching-Agents","25+ Sprachen inkl. Deutsch"],
+      pos:["Geschlossene Schleife: Roleplay → Score → Coach → Repeat","Sehr starke Bottom-up-/PLG-Bewegung und Marke in der Sales-Community","SOC 2 II, ISO 27001, DSGVO — aber keine EU-Datenresidenz, kein DACH-Standort","Gewinnt über Produkt und Hype, verliert an der Datensouveränitätsfrage"],
+      atk:"Keine EU-Datenresidenz, kein DACH-Standort. Sobald Datenschutz, Betriebsrat oder Einkauf den Deal prüfen, fallen sie raus." },
+
+    { c:"A2", name:"Yoodli", url:"https://yoodli.ai",
+      meta:"40 Mio. $ Series B (2025, Madrona + GV) · ~62 Mio. $ gesamt",
+      n:9, k:7, z:3, tags:["L&D","Multi-Persona","Keine EU-Residenz","Sprachanalytik"],
+      why:"Gut kapitalisiert und breiter als Sales — kommt auch über L&D- und Partner-Enablement-Budgets herein.",
+      funcs:["KI-Rollenspiel für Sales, Partner-Training, L&D","Sprachanalytik: Tempo, Füllwörter, Delivery","Multi-Persona: Buying Committee, Panels","Mehrsprachiges Rollenspiel inkl. Deutsch"],
+      pos:["„Train like an athlete“ — Herkunft im Kommunikationscoaching","Breiter als Sales: L&D, Partner Enablement, Comms","SOC 2 Type 2, DSGVO, aber keine EU-Residenz und kein DACH-Büro","Schwach gegen deutsche Datenschutz- und Betriebsratsprüfung"],
+      atk:"Herkunft ist Kommunikationscoaching, nicht Vertriebsmethodik. Plus: keine EU-Residenz — schwach gegen Datenschutz- und Betriebsratsprüfung." },
+
+    { c:"A2", name:"PitchMonster", url:"https://pitchmonster.io",
+      meta:"klein · siebenstelliger ARR · europäische Gründer",
+      n:10, k:3, z:7, tags:["EU-Residenz-Option","29 Sprachen","Sokratischer Coach","Preis-Alternative"],
+      why:"Der strukturell europäischste Pure-Play. Taucht im Mittelstand regelmäßig als günstige Alternative zu euch auf.",
+      funcs:["KI-Rollenspiel mit adaptiv widersprechenden Käufern","Call-Analyse plus automatisiertes KI-Coaching","Modi: Screenshare, Face-to-Face, Telefon","29 Sprachen inkl. Deutsch"],
+      pos:["AI Coach stellt sokratische Fragen statt nur zu bewerten","Schwierigkeitsgrad von Übung bis Stresstest regelbar","DSGVO mit europäischen Datenresidenz-Optionen","Der strukturell „europäischste“ Pure-Play"],
+      atk:"Siebenstelliger ARR und kein DACH-Standort. Sie sind billig, weil sie klein sind — Rollout-Kapazität ist die Frage." },
+
+    { c:"A2", name:"Mindtickle", url:"https://www.mindtickle.com",
+      meta:"~281 Mio. $ Funding · 1,2 Mrd. $ Bewertung · SoftBank",
+      n:7, k:9, z:3, tags:["Analystendeckung","Readiness","Kein deutsches UI"],
+      why:"Gartner- und Forrester-Position setzt sie auf jede Enterprise-Shortlist, auch ohne deutsche Substanz.",
+      funcs:["Sales Readiness, Onboarding, Zertifizierung","AI Sales Role Play Simulator","Content-Management und Digital Sales Rooms","Conversation Intelligence plus Readiness-Analytics"],
+      pos:["„Leader in Revenue Enablement“, Readiness-Index und Scorecards","Agentic AI: „AI teammate for every deal“","Starke Gartner-/Forrester-Position bringt sie auf Shortlists","Kein deutsches UI, kein DACH-Büro, keine bestätigte EU-Residenz"],
+      atk:"Kein deutsches UI, kein DACH-Büro, keine bestätigte EU-Residenz. Auf der Shortlist ja, im deutschen Rollout nein." },
+
+    { c:"A2", name:"Salesloft", url:"https://www.salesloft.com",
+      meta:"seit Dez 2025 mit Clari fusioniert · Vista Equity · 2,3 Mrd. $ · 4.000+ Kunden",
+      n:3, k:8, z:6, tags:["Frankfurt DC","Kein echtes Role-Play","Fusion"],
+      why:"Angrenzend statt konkurrierend: Coaching ist ein Modul, echtes Rollenspiel fehlt. Aber sie sitzen auf dem Sales-Tech-Budget.",
+      funcs:["Sales Engagement und Cadences als Kern","Conversation Intelligence plus Coaching","KI-Agents für Mail, Gespräch, Chat","Forecasting über Clari nach der Fusion"],
+      pos:["„Predictive Revenue System“ als Post-Merger-Narrativ","EU-Rechenzentrum in Frankfurt seit 2021, deutsche Sprachoption","Coaching ist Modul, echtes Rollenspiel gibt es nicht — eher angrenzend","Fusionsintegration bindet Kräfte"],
+      atk:"Die Clari-Integration bindet auf Monate Entwicklungs- und Vertriebskraft. Das ist ein Zeitfenster, das man aktiv nutzen kann." },
+
+    /* ── B ──────────────────────────────────────────────────────────── */
+    { c:"B", name:"CoachHub", star:"Größte strukturelle Bedrohung", url:"https://www.coachhub.com",
+      meta:"AIMY 2.0 · Berlin · ca. 330 Mio. $ Funding (SoftBank Vision Fund 2, Sofina)",
+      n:6, k:9, z:10, tags:["HR-Beziehung","Bündelt gratis","3.500+ Coaches","AIMY 2.0 seit 11/2025"],
+      why:"Hat die HR-Beziehung, das Budget und seit AIMY 2.0 eine Bibliothek lebensechter Rollenspiel-Simulationen. Kann das Feature einfach dazulegen.",
+      funcs:["Digitales 1:1-Coaching mit KI-Matching, 3.500+ Coaches","AIMY™ KI-Coach, 24/7 konversationell","AIMY 2.0 (Nov 2025) mit Bibliothek lebensechter Rollenspiel-Simulationen","Gruppen-, Team- und Executive-Formate"],
+      pos:["Coaching für die ganze Belegschaft demokratisieren, KI als Volumenstufe","50.000+ KI-Coachinggespräche in 5 Monaten, 60 Enterprise-Kunden auf AIMY","Größte strukturelle Bedrohung: HR-Beziehung da, Budget da","Schwäche: Leadership-Framing, keine Sales-Szenariotiefe"],
+      atk:"Leadership-Framing ohne Sales-Szenariotiefe und ohne Produktverankerung. Ihr trainiert auf ihre Produkte, ihren Preis, ihre Einwände — CoachHub nicht." },
+
+    { c:"B", name:"PINKTUM", url:"https://www.pinktum.com",
+      meta:"PAWLIK Group · Hamburg/München · ~120 Mitarbeitende · profitabel",
+      n:7, k:5, z:9, tags:["Rahmenvertrag","Seit 9/2025 Voice-Role-Play","L&D-Incumbent"],
+      why:"Deutscher L&D-Incumbent mit bestehenden Rahmenverträgen — und seit September 2025 sprachbasierten KI-Rollenspielen.",
+      funcs:["Soft-Skill-E-Learning-Bibliothek, videobasiert","PINKpro Learning Journey mit KI-Coach","Seit Sep 2025: sprachbasierte KI-Rollenspiele mit personalisiertem Feedback","Nutzerdefinierter Kontext: Produkt, Situation, Kundentyp"],
+      pos:["„Verstehen ist nicht das Problem, Anwenden schon“ — Rollenspiel als Transferschicht","Deutscher Mittelstands-L&D-Incumbent mit bestehenden Rahmenverträgen","Nicht sales-spezialisiert"],
+      atk:"Nicht sales-spezialisiert. Schlagbar über Szenariotiefe und harten Umsatzbezug statt Soft-Skill-Bibliothek." },
+
+    { c:"B", name:"Speexx", url:"https://www.speexx.com",
+      meta:"München · 1.800+ Organisationen · 8 Mio.+ Nutzer",
+      n:5, k:6, z:10, tags:["Riesige Installed Base","Einkauf freigegeben","Speexx Talk"],
+      why:"Größte Installed Base im Feld und einkaufsseitig in deutschen Konzernen längst freigegeben. Mit der Distribution kann sie schnell nachziehen.",
+      funcs:["Speexx Talk™: KI-gestützte Gesprächspraxis mit Echtzeit-Feedback","Business-Sprachtraining als Umsatzkern","Business Coaching 1:1, Gruppe, Team mit zertifizierten Coaches","Mentoring plus KI-Matchmaking"],
+      pos:["„#1 People Development Platform“ — ein Anbieter für Sprache, Coaching, Skills","Riesige Installed Base in deutschen Konzernen, einkaufsseitig freigegeben","Szenarien noch sprach-/kommunikationsnah, nicht Sales-Methodik"],
+      atk:"Umsatzkern ist Sprachtraining. Szenarien sind kommunikationsnah, nicht Sales-Methodik — noch kein MEDDICC, kein Einwandkatalog." },
+
+    { c:"B", name:"Masterplan.com", url:"https://masterplan.com",
+      meta:"Bochum/Berlin · übernommen von Amadeus Fire (SDAX)",
+      n:4, k:6, z:9, tags:["11.000+ Videos","SDAX-Distribution","PACE ist KI-Tutor","12-Monats-Risiko"],
+      why:"PACE ist heute KI-Tutor, kein Szenario-Rollenspiel. Aber Amadeus-Fire-Distribution plus ein Role-Play-Modul ist ein Zwölf-Monats-Risiko.",
+      funcs:["11.000+ Video-Lernelemente in Kinoqualität","Kuratierter Fremdcontent (Harvard Business School, TED, Zeit Akademie)","PACE: KI-Coach zur Anwendung des Gelernten, dialogisch","LMS-/HR-Integrationen, Compliance und EU-AI-Act-Kurse"],
+      pos:["Contentqualität und deutsche Produktionsstandards","Logos: Otto Group, REWE, Domino's","PACE ist noch KI-Tutor, kein Szenario-Rollenspiel","Amadeus-Fire-Distribution plus künftiges Role-Play-Modul = 12-Monats-Risiko"],
+      atk:"Heute kein Rollenspiel, sondern Videobibliothek plus Tutor-Chat. Das Fenster ist offen — aber es schließt sich." },
+
+    { c:"B", name:"INtem Trainingsgruppe", url:"https://www.intem.de/ki-vertriebstraining/", meta:"Mannheim",
+      n:7, k:3, z:9, tags:["Kundenbeziehung","Trainernetzwerk","Transfermethodik"],
+      why:"Große etablierte deutsche Vertriebstrainingsmarke. Gefährlich, weil sie die Kundenbeziehung schon besitzen.",
+      funcs:["KI-Vertriebstraining mit Gesprächssimulation","KI-Übung eingebettet in die INtem-Transfermethodik","Auslieferung über bundesweites Trainernetzwerk"],
+      pos:["Große etablierte deutsche Vertriebstrainingsmarke","KI als Verstärkung zwischen den Seminarmodulen","Gefährlich, weil sie die Kundenbeziehung schon besitzen"],
+      atk:"Die KI ist zugekaufte Zwischenschicht zwischen Seminarmodulen, kein eigenes Produkt. Sie sind eher Partner als Gegner." },
+
+    { c:"B", name:"DIV — Deutsches Institut für Vertriebskompetenz", url:"https://www.div-institut.de/ki-verkaufstraining/", meta:"Allensbach",
+      n:7, k:2, z:8, tags:["Kanalbedrohung","Läuft auf sleak.ai","Zertifizierung"],
+      why:"Kein Tech-Wettbewerber, aber eine Kanalbedrohung: bindet Mittelstandskunden technisch an sleak.ai.",
+      funcs:["KI-Verkaufstraining, technisch auf sleak.ai aufgesetzt","Cold Call, Discovery, Demo, Einwände","Phasenbasierte Scorecards, konfigurierbare Personas"],
+      pos:["Institutsglaubwürdigkeit plus Zertifizierungs-Framing","KI als Ergänzung, nicht Ersatz klassischer Trainings","Kein Tech-Wettbewerber, aber Kanalbedrohung"],
+      atk:"Sie besitzen die Technik nicht. Genau derselbe Kanal lässt sich mit eurer Engine besetzen — hier ist Partnerschaft die Waffe." },
+
+    { c:"B", name:"TelesalesCoach", url:"https://telesalescoach.de", meta:"Tobias Ain · Berlin",
+      n:7, k:1, z:6, tags:["Personenmarke","Telefonakquise","Muster"],
+      why:"Muster mit Ansage: deutscher Trainer baut eigenes KI-Tool. Davon kommt mehr.",
+      funcs:["KI-Simulation von Telefonakquise und Servicegesprächen","Branchenspezifische, unternehmensindividuelle Szenarien","Echtzeit-Feedback plus Analyse nach dem Gespräch"],
+      pos:["Trainer-Personenmarke als Vertrauenshebel","Enger Fokus auf Telefonakquise statt Full-Funnel","Muster: deutscher Trainer baut eigenes KI-Tool"],
+      atk:"Enger Fokus auf Telefonakquise, kein Full-Funnel, und die Skalierung hängt an einer Person." },
+
+    /* ── C ──────────────────────────────────────────────────────────── */
+    { c:"C", name:"Demodesk", star:"Wahrscheinlichster Quereinsteiger", url:"https://www.demodesk.com",
+      meta:"München · ca. 26 Mio. $ Funding",
+      n:4, k:6, z:9, tags:["Hat die Botschaft schon","EU-Daten Frankfurt","98 Sprachen","Kein Role-Play"],
+      why:"Besitzt bereits die Botschaft „KI-Sales-Coaching, deutsch, DSGVO“ und die Gesprächsdaten. Nur eine Produktentscheidung von euch entfernt.",
+      funcs:["Aufzeichnung/Transkription in 98 Sprachen","AI Coach bewertet echte Calls gegen das Playbook","CRM Concierge füllt Salesforce/HubSpot/Pipedrive automatisch","Kein Rollenspiel — noch nicht"],
+      pos:["DSGVO-konforme europäische Gong-Alternative, EU-Daten (Azure Frankfurt), „made in Munich“","Besitzt die Botschaft „KI-Sales-Coaching, deutsch, DSGVO“ und die Gesprächsdaten","Wahrscheinlichster Quereinsteiger"],
+      atk:"Heute kein Rollenspiel. Simulation ist ein anderes Produkt als Analyse — Personas, Didaktik, Curriculum baut man nicht in einem Quartal." },
+
+    { c:"C", name:"Kickscale", url:"https://www.kickscale.com/de", meta:"Wien",
+      n:3, k:4, z:8, tags:["ISO 27001","Deutsche Server","Führend in AT","Kein Role-Play"],
+      why:"Konkurriert um dasselbe „Vertrieb mit KI verbessern“-Budget und ist die führende Sales-AI-Marke in Österreich.",
+      funcs:["KI-Notetaker, CRM-Update, Call-Analyse","Coaching-Insights und Forecasting","Kein Rollenspiel"],
+      pos:["Europäische DSGVO-Alternative zu Gong, ISO 27001, deutsche Server","Kein Rollenspiel — konkurriert aber um dasselbe Budget","Führende Sales-AI-Marke in Österreich"],
+      atk:"Reine Analyse nach dem Gespräch. Ohne Übungsschleife bleibt Verhaltensänderung aus — das ist euer Kernargument." },
+
+    { c:"C", name:"salesskill.io", url:"https://salesskill.io", meta:"Deutschland",
+      n:3, k:2, z:7, tags:["28 Skill-Dimensionen","Analyse-first","Expansionsrisiko"],
+      why:"Angrenzend, könnte Rollenspiel auf den Analysekern draufsetzen.",
+      funcs:["Analysiert echte Calls über ca. 28 Skill-Dimensionen","Automatische Coaching-Empfehlungen","Kein Rollenspiel"],
+      pos:["Datenorientiertes „KI-basiertes Sales Enablement“ statt Roleplay-first","Angrenzend, könnte Rollenspiel auf den Analysekern setzen"],
+      atk:"Klein und ohne Simulationsschicht. Solange nur bewertet wird, fehlt der Übungsort." },
+
+    { c:"C", name:"tl;dv", url:"https://tldv.io", meta:"Berlin",
+      n:2, k:5, z:7, tags:["Free Forever","5.000+ Integrationen","Konkurrierende Story"],
+      why:"Kein Rollenspiel — aber ihr Narrativ „lerne aus echten Calls statt aus simulierten“ ist eine direkt konkurrierende Story.",
+      funcs:["Meeting-Aufzeichnung in 30+ Sprachen","KI-Summaries und Playbook-Adhärenz","5.000+ Integrationen, Free-Forever-Tarif"],
+      pos:["Kein Rollenspiel","Narrativ: „lerne aus echten Calls statt aus simulierten“"],
+      atk:"Echte Calls kommen nach dem Fehler, Simulation davor. Wer nur aufzeichnet, übt an lebenden Kunden — genau das kostet Deals." },
+
+    { c:"C", name:"Sharpist", url:"https://www.sharpist.com",
+      meta:"Berlin · 23 Mio. $ Series A · ISO 27001 · deutsche Server",
+      n:2, k:5, z:8, tags:["Finanziert","Stellt KI-Rollen ein","Grenze noch nicht überschritten"],
+      why:"Finanziert, deutsche Server, und stellt KI-Produktrollen ein. CoachHub hat die Linie zum Rollenspiel schon überschritten.",
+      funcs:["1:1-Coaching mit zertifizierten Coaches","KI-Coach als Chat und Voice, 5 Coaching-Stile","Kein Rollenspiel — reflektierendes Coaching, keine Simulation"],
+      pos:["Kein Rollenspiel, sondern reflektierendes Coaching","Stellt KI-Produktrollen ein; CoachHub hat die Linie schon überschritten"],
+      atk:"Reflektierendes Coaching ist das Gegenteil von Drill. Bis dort ein Simulationsprodukt steht, dauert es." },
+
+    { c:"C", name:"Sparrks", url:"https://www.sparrks.io", meta:"Berlin · 280+ Coaches",
+      n:1, k:3, z:7, tags:["Anti-KI-Positionierung","Partner-Kandidat"],
+      why:"Positioniert sich explizit gegen KI-Ersatz. Eher potenzieller Partner als Wettbewerber.",
+      funcs:["Strukturiertes 5-Sessions-Coaching","Matching-Algorithmus","Kein Rollenspiel"],
+      pos:["„Effective. Efficient. Human.“ — explizit gegen KI-Ersatz positioniert","Eher potenzieller Partner als Wettbewerber"],
+      atk:"Ihre Anti-KI-Positionierung schließt ein eigenes Rollenspiel praktisch aus. Als Partnerkanal ansprechen, nicht als Gegner behandeln." },
+
+    { c:"C", name:"Cornerstone (Galaxy / Immerse)", url:"https://www.cornerstoneondemand.com",
+      meta:"Suite · Ankündigung HR Tech 2025",
+      n:3, k:9, z:6, tags:["Suite","Bündel-Risiko","Nicht sales-spezifisch"],
+      why:"Risiko ist nicht das Produkt, sondern der Satz „haben wir schon in Cornerstone“.",
+      funcs:["Auf der HR Tech 2025 „virtual human coaching conversations“ angekündigt","VR-/Avatar-Formate","Nicht sales-spezifisch"],
+      pos:["Suite-Bündelung als Hauptargument","Risiko ist das Bündeln: „haben wir schon in Cornerstone“"],
+      atk:"Angekündigt, nicht ausgeliefert, und nicht sales-spezifisch. Gegen „haben wir schon“ hilft ein Side-by-Side im echten Szenario." },
+
+    { c:"C", name:"SAP SuccessFactors Learning", url:"https://www.sap.com/products/hcm/learning-management-system.html",
+      meta:"Suite · Roadmap 2026: Skills und Joule-Agents",
+      n:0, k:8, z:5, tags:["Integrationsziel","Kein Role-Play in Roadmap"],
+      why:"Aktuell kein Wettbewerber, sondern Integrationsziel.",
+      funcs:["Roadmap 2026 ist Skills und Joule-Agents","Kein Rollenspiel geplant"],
+      pos:["Aktuell kein Wettbewerber, sondern Integrationsziel"],
+      atk:"Keine Angriffsfläche nötig — hier geht es um Integration. Eine SuccessFactors-Anbindung ist ein Verkaufsargument, kein Risiko." },
+
+    /* ── D ──────────────────────────────────────────────────────────── */
+    { c:"D", name:"Highspot", url:"https://www.highspot.com/product/sales-training-software/",
+      meta:"Enterprise-Incumbent · 100+ Integrationen",
+      n:7, k:9, z:5, tags:["GTM-Enablement","Deal-Kontext","Im CRM eingebettet"],
+      why:"Enterprise-Incumbent, der Training an Umsatzergebnisse koppelt statt an Completion Rates — und Rollenspiel mit echtem Deal-Kontext füttert.",
+      funcs:["Adaptive, personalisierte Lernpfade je Skill-Gap","KI-Rollenspiel mit echtem Deal-Kontext","KI-gestützte Kurserstellung aus vorhandenem Content","Training im CRM/Workflow eingebettet, 100+ Integrationen"],
+      pos:["„The only unified platform for GTM enablement“","Training an Umsatzergebnisse gekoppelt, nicht an Completion Rates","Claim: ca. 8 Tage schnelleres Ramp-up"],
+      atk:"Rollenspiel ist ein Modul in einer Content-Plattform, kein Kernprodukt. Kein deutschsprachiger Schwerpunkt, hoher Einstiegspreis." },
+
+    { c:"D", name:"Showpad Coach", url:"https://www.showpad.com/product/showpad-coach",
+      meta:"Deutsche URL /de/produkt/showpad-coach/ ist tot (404)",
+      n:8, k:7, z:5, tags:["Roleplay AI","Pitch AI","Deutsche Seite 404"],
+      why:"Reifes Coaching-Produkt mit widersprechenden KI-Käufern und Delivery-Scoring, im Bündel mit Content verkauft.",
+      funcs:["Roleplay AI: Simulationen mit widersprechenden KI-Käufern","Pitch AI: automatisches Scoring von Delivery und Messaging","Rollenbasierte Lernpfade, Zertifizierungen, Onboarding","Skills-Analytics verknüpft Training mit Rep-Performance"],
+      pos:["„Ein eigener Coach für jeden Rep“ — skaliert Manager-Coaching","„Sellers who practice more, close more“","Coaching im Bündel mit Content und Buyer Engagement"],
+      atk:"Die deutsche Produktseite ist 404. Das ist ein belegbares Signal, wie hoch DACH auf ihrer Prioritätenliste steht." },
+
+    { c:"D", name:"Salesforce — Agentforce Sales Coach", url:"https://www.salesforce.com/sales/ai-sales-agent/ai-sales-coaching/",
+      meta:"Alte Form-URL ist tot · Atlas Reasoning Engine · Einstein Trust Layer",
+      n:6, k:10, z:7, tags:["CRM-Verankerung","Bündel-Risiko","Enterprise-Trust"],
+      why:"Tiefe CRM- und Data-360-Verankerung: deal-spezifisch statt generisch. Und es liegt im Vertrag, den der Kunde schon hat.",
+      funcs:["KI-Agent spielt den Käufer im Übungsgespräch","Vorgefertigte Szenarien je Deal-Phase: Qualifizierung, Verhandlung","Pitch-Analyse mit personalisiertem Feedback","Feedback auf CRM-Opportunity- und Account-Daten geerdet"],
+      pos:["„Autonomer Agent“ statt passiver Analytics (Atlas Reasoning Engine)","Tiefe CRM-/Data-360-Verankerung: deal-spezifisch statt generisch","Enterprise-Trust über Einstein Trust Layer"],
+      atk:"Nur so gut wie die CRM-Datenqualität — und die ist selten gut. Didaktik, Curriculum und deutschsprachige Gesprächsqualität sind nicht ihr Feld." },
+
+    { c:"D", name:"Letter AI", url:"https://www.letter.ai/", meta:"Series B · SOC 2 Type II",
+      n:7, k:5, z:3, tags:["AI-native","Content + Training","RFP-Automatisierung"],
+      why:"AI-native Enablement-Plattform, die Content, Training, Coaching und Buyer Engagement in einem verkauft.",
+      funcs:["KI-generierte Sales-Inhalte und Personalisierung","KI-Training plus realistische Rollenspiel-Szenarien","„Compass“: Deal-Coaching, Meeting-Prep, Conversational AI","RFP-Automatisierung und AI Sales Room für Käufer"],
+      pos:["„AI-native from the ground up“, nicht KI auf Legacy-Enablement geschraubt","Eine Plattform: Content + Training + Coaching + Buyer Engagement","SOC 2 Type II, keine Kundendaten fürs Modelltraining"],
+      atk:"Kein DACH-Bezug, kein deutsches UI, keine EU-Residenz kommuniziert. Breite statt Tiefe im Rollenspiel." },
+
+    { c:"D", name:"GRW AI", url:"https://www.grw.ai/", meta:"Sales-Execution-Plattform",
+      n:7, k:4, z:2, tags:["Läuft in Slack/Teams","Deal-spezifisch","Kein neuer Workflow"],
+      why:"Rollenspiel als Modul einer Execution-Plattform, die im bestehenden Workflow läuft — geringe Einführungshürde.",
+      funcs:["KI-Assistent „Taylor“: Meeting-Prep, Follow-ups, CRM-Pflege","KI-Rollenspiele: vorgefertigt, deal-spezifisch oder custom","Call-/Deal-Review-Coaching, 1:1-Vorbereitung für Manager","Deal-Risiko-Signale, Rep-Analytics, Forecasting"],
+      pos:["Sales-Execution-Plattform zuerst, Rollenspiel ist ein Modul","Läuft in Slack/Teams/Chrome/CRM, kein neuer Workflow","Claims: 28 % höhere Win Rates, 32 % Quota Attainment"],
+      atk:"Rollenspiel ist eine Nebenfunktion neben Admin-Automatisierung. Kein DACH-Bezug, keine deutschen Referenzen." },
+
+    { c:"D", name:"Taskbase", url:"https://taskbase.com/", meta:"Zürich",
+      n:6, k:2, z:7, tags:["DACH-Standort","Skills Wallet","Teams/Slack"],
+      why:"Schweizer Anbieter mit Coaching plus Automatisierung — DACH-Standort macht sie in CH-Deals relevant.",
+      funcs:["KI-Coach für Sales-Skills: Cold Calling, Kommunikation","Analysiert echte Call-Aufzeichnungen, kontextuelles Feedback","Automatisiert Rep-Admin-Aufgaben neben dem Coaching","„Skills Wallet“: Kompetenzen in messbare Teil-Skills zerlegt"],
+      pos:["„Two Jobs, One AI“ — Coaching plus Automatisierung","On-the-job aus echten Performance-Daten statt Kursen","Verteilung über Teams/Slack/Google Chat/HubSpot"],
+      atk:"On-the-job statt Kurse heißt: kein strukturiertes Übungscurriculum. Und die Herkunft liegt im Bildungs-, nicht im Vertriebsmarkt." },
+
+    { c:"D", name:"Replicate Labs (Keenan)", url:"https://www.replicatelabs.ai/", meta:"Free Tier · Gap Selling, MEDDIC",
+      n:5, k:2, z:2, tags:["Free Tier","Methodik-Persona","Echte Deals"],
+      why:"Coacht echte Deals statt Szenario-Rollenspiel, methodisch an Gap Selling und MEDDIC verankert.",
+      funcs:["Cold-Email-Scoring mit Umschreibvorschlägen","Live-Coaching zu stockenden Deals und nächsten Schritten","Pre-Call-Prep: Buying Committee, Blocker, Einstiegsfragen","Zieht Calls/Transkripte; Integration Gong, Salesforce, Slack"],
+      pos:["„Not a grader. A coach you keep going back to“","Methodisch verankert: Gap Selling, MEDDIC, Keenan-Persona","Coacht echte Deals statt Szenario-Rollenspiel"],
+      atk:"Kein Rollenspiel, keine Übungsschleife, kein DACH-Bezug. Angrenzend, nicht konkurrierend." },
+
+    /* ── E ──────────────────────────────────────────────────────────── */
+    { c:"E", name:"Concentrix — iX Hero Roleplay", url:"https://www.concentrix.com/ix-hero/",
+      meta:"BPO-Konzern · 50+ Sprachen",
+      n:4, k:9, z:3, tags:["Contact Center","BPO-Bündel","50+ Sprachen"],
+      why:"Anderer Buyer — Contact Center statt B2B-Sales — aber im Bündel mit BPO-Services verkauft, also mit eigenem Budgetzugang.",
+      funcs:["GenAI-Simulationen: strukturierte oder freie Gesprächsszenarien","Sprach- und Chat-Übung mit automatischem Scoring","Sofortiges Coaching-Feedback nach jeder Übung","50+ Sprachen, Teil des iX Hero Advisor Workspace"],
+      pos:["Contact-Center-Agents, nicht B2B-Sales","Adressiert 6–12 Monate Time-to-Proficiency","Im Bündel mit Concentrix BPO-Services verkauft"],
+      atk:"Nur relevant, wenn der Buyer im Service sitzt. Für B2B-Vertrieb fehlen Methodik, Deal-Kontext und Buying-Committee-Logik." },
+
+    { c:"E", name:"TODAY", url:"https://www.usetoday.io/de", meta:"usetoday.io · Deutschland",
+      n:2, k:3, z:8, tags:["Vertikal FS","DSGVO/EU AI Act","Kein Role-Play"],
+      why:"Vertikal auf Finanzberater und Versicherungsmakler, deutsch gebaut, mit Signal Iduna und Clark als Logos.",
+      funcs:["Transkribiert Berater-Kunden-Gespräche, Finanz-/Versicherungsvokabular","Erzeugt Zusammenfassungen, Doku und Aufgaben ins CRM","Kundengedächtnis: Situation, Portfolio, nächste Schritte","Coaching-Insights: Redeanteil, Sprechtempo, Cross-Sell-Signale"],
+      pos:["Vertikal auf Finanzberater und Versicherungsmakler","Deutsch gebaut, DSGVO und EU AI Act konform","Logos: Signal Iduna, Clark, blaudirekt","Kein simuliertes Rollenspiel"],
+      atk:"Kein simuliertes Rollenspiel. In FS-Accounts kann TODAY neben euch stehen, nicht statt euch." },
+
+    { c:"E", name:"Quantified.ai", url:"https://www.quantified.ai", meta:"Atlanta · klein",
+      n:8, k:2, z:1, tags:["Life Sciences","MLR-Compliance","Nur Englisch"],
+      why:"Sehr nah am Produkt, aber nur über US-gesteuerte Pharmakonzerne in DACH relevant.",
+      funcs:["KI-Rollenspiel für Life-Sciences-Außendienst","MLR-/On-Label-Compliance-Scoring mit Audit Trail","Veeva-/Salesforce-/LMS-Integrationen"],
+      pos:["Spezialisiert auf Pharma-Außendienst und Compliance-Nachweis","Nur Englisch, keine EU-Residenz"],
+      atk:"Nur Englisch, keine EU-Residenz. In DACH-Pharma scheitert das an Sprache und Betriebsrat." },
+
+    { c:"E", name:"Zenarate", url:"https://www.zenarate.com", meta:"15 Mio. $ (Volition Capital) · nur US-Standorte",
+      n:5, k:4, z:1, tags:["CX/BPO","Kein Deutsch","AutoQA"],
+      why:"CX- und BPO-Fokus, kein Deutsch, keine EU-Residenz. Nur relevant, wenn der Buyer im Service sitzt.",
+      funcs:["KI-Gesprächssimulation für Contact-Center-Agents","Software-/Prozesssimulationen, AutoQA","Performance-Analytics und KI-Coaching"],
+      pos:["„Frontline Performance“ — CX/BPO, nicht B2B-Sales","Kein Deutsch, keine EU-Residenz"],
+      atk:"Kein Deutsch, keine EU-Residenz, keine B2B-Sales-Methodik. Praktisch kein DACH-Risiko." },
+
+    { c:"E", name:"Rehearsal (ELB Learning)", url:"https://www.rehearsal.com", meta:"AI-Roleplay-Modul seit Feb 2026 · 50+ Sprachen",
+      n:7, k:3, z:1, tags:["L&D-Buyer","Mentor-Review","Kein EU-Hosting"],
+      why:"Video-Rollenspiel mit Mentor-Review, seit Februar 2026 mit AI-Modul — aber L&D-Buyer statt Revenue-Org.",
+      funcs:["Video-Rollenspiel mit Mentor-Review","AI-Roleplay-Modul seit Feb 2026","50+ Sprachen"],
+      pos:["L&D-Buyer statt Revenue-Org","Kein deutsches UI, kein EU-Hosting — geringe Bedrohung"],
+      atk:"Kein deutsches UI, kein EU-Hosting, Mentor-Review braucht menschliche Kapazität. Geringe Bedrohung." },
+
+    { c:"E", name:"SpeakSage", url:"https://speaksage.com/", meta:"Leadership-Szenarien",
+      n:5, k:1, z:2, tags:["Führungsgespräche","Judgment-free","Andere Zielgruppe"],
+      why:"Führungsgespräche statt Sales: Feedback, Gehalt, Konflikt, Kündigung. Andere Zielgruppe, gleiche Technik.",
+      funcs:["Live-Audio-Rollenspiel mit KI-Charakteren","Echtzeit-Coaching plus Transkriptanalyse","Vorgefertigte Szenarien und eigener Szenario-Builder","Analytics auf Leadership-Kompetenzen gemappt"],
+      pos:["Führungsgespräche statt Sales: Feedback, Gehalt, Konflikt, Kündigung","Günstige, skalierbare Alternative zu Executive Coaching","„Judgment-free“ Übungsraum für unangenehme Gespräche"],
+      atk:"Keine Sales-Methodik, keine Deal-Logik, kein DACH-Bezug. Nur ein Thema, wenn HR den Kauf treibt." },
+
+    /* ── F ──────────────────────────────────────────────────────────── */
+    { c:"F", w:1, name:"Quotain", star:"Glaubwürdigster neuer Entrant", url:"https://quotain.com", meta:"YC S2025 · NYC · 30+ Sprachen",
+      n:9, k:3, z:1, tags:["YC S2025","CRM-Daten","Rubric Parity"],
+      why:"Baut KI-Käufer aus echten CRM-Datensätzen und LinkedIn-Profilen und bewertet echte Calls mit demselben Raster.",
+      funcs:["KI-Käufer aus echten CRM-Datensätzen und LinkedIn-Profilen","Bewertet echte Calls mit demselben Raster","30+ Sprachen"],
+      pos:["Glaubwürdigster neuer Entrant der Watchlist"],
+      atk:"Noch kein DACH-Bezug und YC-frisch. Der Vorsprung liegt bei Datenresidenz und deutscher Gesprächsqualität — solange sie das nicht bauen." },
+
+    { c:"F", w:1, name:"Avarra", url:"https://avarra.ai", meta:"8 Mio. $ Seed · Lightspeed",
+      n:9, k:3, z:1, tags:["Fotorealistisch","Produktionsqualität","Echte Calls → Module"],
+      why:"Setzt die Enterprise-Messlatte bei Produktionsqualität und macht echte Calls zu Trainingsmodulen.",
+      funcs:["Fotorealistische Avatare","Macht echte Calls zu Trainingsmodulen"],
+      pos:["Setzt die Enterprise-Messlatte bei Produktionsqualität"],
+      atk:"Produktionsqualität ist teuer und langsam zu skalieren. Kein DACH-Bezug, keine deutschsprachige Tiefe." },
+
+    { c:"F", w:1, name:"SellMeThisPen", url:"https://sellmethispen.ai", meta:"Toronto · 1.400+ Kunden",
+      n:9, k:2, z:3, tags:["SMB-Preis","Live-Assist","Auf DE-Vergleichsseiten"],
+      why:"Practice plus Live-Assist plus CRM-Automatisierung zum SMB-Preis — und taucht bereits auf deutschen Vergleichsseiten auf.",
+      funcs:["Practice-Rollenspiel","Live-Assist im echten Gespräch","CRM-Automatisierung"],
+      pos:["SMB-Preispunkt, 1.400+ Kunden","Erscheint bereits auf deutschen Vergleichsseiten"],
+      atk:"SMB-Preis heißt SMB-Tiefe. Kein EU-Hosting, kein deutschsprachiger Support, keine Enterprise-Compliance." },
+
+    { c:"F", w:1, name:"Eagr", url:"https://eagr.ai", meta:"Paris · HEC-Inkubator · EU-Hosting",
+      n:8, k:2, z:4, tags:["EU-Hosting","Live-Coach","FR-Pendant"],
+      why:"Das französische Pendant zu euch: Live-Coach im echten Call plus Übung, mit EU-Hosting.",
+      funcs:["Live-Coach im echten Call","Übungsmodus","EU-Hosting"],
+      pos:["Das französische Pendant zu euch"],
+      atk:"Heimatmarkt Frankreich, keine DACH-Präsenz. Wenn sie expandieren, dann zuerst nach Süden — Zeitfenster nutzen." },
+
+    { c:"F", w:1, name:"Chambr", url:"https://chambr.ai", meta:"Techstars · San Francisco",
+      n:9, k:2, z:2, tags:["White-Label","Telefonanruf","Kanalangriff"],
+      why:"Expliziter White-Label-Track für Trainingsanbieter — greift denselben Kanal an wie careertrainer.",
+      funcs:["Live-Voice-Rollenspiel per Browser oder echtem Telefonanruf","White-Label-Track für Trainingsanbieter"],
+      pos:["Greift denselben Kanal an wie careertrainer"],
+      atk:"US-Basis ohne EU-Residenz macht den White-Label-Pitch bei deutschen Trainern schwer verkäuflich. Da könnt ihr schneller sein." },
+
+    { c:"F", w:1, name:"FullyRamped", url:"https://fullyramped.com", meta:"2,3 Mio. $ Seed · mehrsprachig",
+      n:9, k:2, z:1, tags:["Zertifizierungen","Gong/Clari/Salesloft"],
+      why:"Cold Call, Discovery, Demo plus Zertifizierungen mit Integration in Gong, Clari und Salesloft.",
+      funcs:["Cold Call, Discovery, Demo","Zertifizierungen","Gong-/Clari-/Salesloft-Integration"],
+      pos:["Mehrsprachig, integrationsstark"],
+      atk:"Klein finanziert, kein DACH-Bezug. Aktuell reiner Produktvergleich, kein Deal-Risiko." },
+
+    { c:"F", w:1, name:"Salesably", url:"https://salesably.ai", meta:"Rubric Parity",
+      n:9, k:1, z:1, tags:["Ein Bewertungsraster","Benchmark-wert"],
+      why:"Ein Bewertungsraster für Übung und echte Calls. Diese „Rubric Parity“ ist gerade der stärkste Differenzierer der Kategorie.",
+      funcs:["Ein Bewertungsraster für Übung und echte Calls"],
+      pos:["„Rubric Parity“ als Differenzierer — lohnt sich zu benchmarken"],
+      atk:"Sehr klein und ohne DACH-Bezug — aber die Rubric-Parity-Idee ist es wert, sie selbst zu übernehmen." },
+
+    { c:"F", w:1, name:"Kendo AI", url:"https://kendo.ai", meta:"transparente 55–100 $/Seat",
+      n:8, k:2, z:1, tags:["BANT/MEDDPICC/NEPQ","SEO","Transparente Preise"],
+      why:"Methodik-Scorecards plus starke SEO auf die Kaufkeywords und offen ausgewiesene Seat-Preise.",
+      funcs:["BANT-/MEDDPICC-/NEPQ-Scorecards","Transparente Preise 55–100 $/Seat"],
+      pos:["Starke SEO auf die Kaufkeywords"],
+      atk:"Preistransparenz ohne EU-Bezug. Relevant nur als Preisanker in Vergleichsgesprächen." },
+
+    { c:"F", w:1, name:"Pitchbase", url:"https://pitchbase.app", meta:"Frankreich · 9–59 €/Monat",
+      n:8, k:1, z:3, tags:["Preisdruck","9 €/Monat","Unterbricht & legt auf"],
+      why:"Normalisiert Billigpreise für KI-Rollenspiel in Europa: 9–59 € im Monat.",
+      funcs:["Voice-KI, die unterbricht und auflegt","9–59 €/Monat"],
+      pos:["Normalisiert Billigpreise für KI-Rollenspiel in Europa"],
+      atk:"Zu billig, um Enterprise zu bedienen. Der Schaden ist die Preiserwartung, nicht der verlorene Deal." },
+
+    { c:"F", w:1, name:"SecondBody", url:"https://secondbody.ai", meta:"Paris/London/NYC",
+      n:8, k:2, z:2, tags:["WhatsApp/Telefon","Mobile-first","Reguliert"],
+      why:"Rollenspiel per WhatsApp und Telefon für Außendienst in regulierten Branchen — ein Mobile-first-Wedge.",
+      funcs:["Rollenspiel per WhatsApp und Telefon","Für Außendienst in regulierten Branchen"],
+      pos:["Mobile-first-Wedge"],
+      atk:"WhatsApp in regulierten deutschen Branchen ist ein Compliance-Problem, kein Feature. In DACH schwer zu verkaufen." },
+
+    { c:"F", w:1, name:"Dextego", url:"https://dextego.com", meta:"Verhaltenswissenschaft + Psychometrie",
+      n:7, k:1, z:1, tags:["Psychometrie","Verkauft auch an HR"],
+      why:"Verhaltenswissenschaft und Psychometrie als Layer, verkauft auch an HR.",
+      funcs:["Psychometrie- und Verhaltens-Layer über dem Training","Verkauft auch an HR"],
+      pos:["Differenzierung über Verhaltenswissenschaft"],
+      atk:"Psychometrie im Vertriebskontext ist in Deutschland mitbestimmungspflichtig. Das bremst genau dort, wo sie stark sein wollen." },
+
+    { c:"F", w:1, name:"Outdoo AI", url:"https://outdoo.ai", meta:"Rebrand von MeetRecord",
+      n:5, k:2, z:1, tags:["CI kippt in Role-Play","Konvergenz-Beleg"],
+      why:"Conversation Intelligence, die ins Rollenspiel kippt — Beleg dafür, dass die Kategorien konvergieren.",
+      funcs:["Conversation Intelligence mit Rollenspiel-Erweiterung"],
+      pos:["Beleg für Konvergenz von CI und Role-Play"],
+      atk:"Rebrand mitten im Produktwechsel. Kein DACH-Bezug — interessant als Trendbeleg, nicht als Gegner." },
+
+    { c:"F", w:1, name:"Tenor", url:"https://tenorhq.com", meta:"~5,4 Mio. $ · Gründer ex-Workday Learning",
+      n:5, k:2, z:1, tags:["Führungsgespräche","L&D-Budget","Flankenangriff"],
+      why:"Führungsgespräche statt Sales — ein Flankenangriff über das L&D-Budget.",
+      funcs:["Rollenspiel für Führungsgespräche"],
+      pos:["Flankenangriff über das L&D-Budget"],
+      atk:"Kein Sales-Fokus, kein DACH-Bezug. Nur relevant, wenn L&D den Kauf entscheidet." },
+
+    { c:"F", w:1, name:"SimSkills", url:"https://simskills.io", meta:"Madrid",
+      n:6, k:1, z:1, tags:["Soft Skills","Spanien","Corporate L&D"],
+      why:"Avatar-Rollenspiel für Soft Skills, stark im spanischen Corporate L&D.",
+      funcs:["Avatar-Rollenspiel für Soft Skills"],
+      pos:["Stark im spanischen Corporate L&D"],
+      atk:"Heimatmarkt Spanien, Soft Skills statt Sales. Kein DACH-Risiko." },
+
+    { c:"F", w:1, name:"Lexarius", url:"https://lexarius.com", meta:"Abu Dhabi/Singapur · INSEAD + SC Ventures",
+      n:4, k:3, z:3, tags:["INSEAD-Branding","Inhaltliche Autorität"],
+      why:"Verkauft INSEAD-gebrandete KI-Programme in europäische Konzerne. Konkurriert über inhaltliche Autorität, nicht Technik.",
+      funcs:["INSEAD-gebrandete KI-Programme für Konzerne"],
+      pos:["Konkurriert über inhaltliche Autorität, nicht Technik"],
+      atk:"Autorität ist geliehen, die Technik ist nicht der Kern. Gegen Szenariotiefe und Produktverankerung schwach." },
+
+    { c:"F", w:1, name:"Practis · Firecoach AI · Awarathon", url:"https://practis.ai", meta:"Sammelposten · kein DACH-Bezug",
+      n:7, k:1, z:0, tags:["Sammelposten","Klein","Kein DACH"],
+      why:"Kleiner, derzeit ohne DACH-Bezug. Firecoach mit dem Pitch „klone deinen besten Closer“, Awarathon aus Indien.",
+      funcs:["Practis: KI-Übungsplattform","Firecoach AI: „klone deinen besten Closer“","Awarathon: Rollenspiel-Plattform aus Indien"],
+      pos:["Kleiner, derzeit ohne DACH-Bezug"],
+      atk:"Kein DACH-Bezug, keine EU-Compliance, keine deutschen Referenzen. Reine Beobachtungsposition." },
+
+    /* ── G ──────────────────────────────────────────────────────────── */
+    { c:"G", name:"edyoucated", url:"https://edyoucated.org/", meta:"Deutschland · hat Peers Solutions übernommen",
+      n:1, k:4, z:8, tags:["LMS trifft LXP","Konsolidierer","DSGVO/EU-DC"],
+      why:"Konsolidiert den deutschen Markt und sitzt mit Deutsche Bahn und BASF auf großen L&D-Verträgen — aber ohne Rollenspiel.",
+      funcs:["LMS: Compliance, Seminare, Zertifizierungen, Blended Learning","Skills-Modul: Skill-Katalog, Assessments, Gap-Analyse","KI-Autorentool und personalisierte Lernpfade","Content-Marktplatz und Learning Analytics"],
+      pos:["„LMS trifft LXP“ auf Skill-Basis","Deutsch/EU-Trust: DSGVO, EU-Rechenzentren, SSO","Konsolidiert den deutschen Markt — hat Peers Solutions übernommen","Logos: Deutsche Bahn, BASF, DRK, Shopware"],
+      atk:"Kein Rollenspiel, kein Sales-Fokus. Als LMS-Integrationspartner interessanter denn als Gegner." },
+
+    { c:"G", name:"Skillable", url:"https://www.skillable.com/", meta:"400+ Unternehmen · 50 Mio.+ Labs",
+      n:0, k:5, z:3, tags:["Hands-on-Labs","IT-Enablement","Kein Sales"],
+      why:"Lernen durch Tun in echter Software — technisches Enablement, kein Sales.",
+      funcs:["Virtuelle Hands-on-Labs und Cloud-Sandboxes","Geführte Labs, bewertete Assessments, Challenge-Übungen","LMS/LXP-Anbindung über LTI und APIs","Automatisches Performance-Scoring, Learner Analytics"],
+      pos:["Lernen durch Tun in echter Software statt Content-Konsum","Autorisierter Lab-Hoster für Microsoft und Pearson VUE","Technisches/IT-Enablement, kein Sales"],
+      atk:"Anderer Markt. Kein Berührungspunkt mit Vertriebstraining." },
+
+    { c:"G", name:"flipsight", url:"https://flipsight.de/", meta:"Deutschland · Shopfloor",
+      n:0, k:2, z:4, tags:["Produktion","Kompetenzmatrix","Audit"],
+      why:"Qualifizierungs-Autopilot für den Shopfloor. Anderer Markt.",
+      funcs:["Kompetenzmatrix und Qualifikationstracking für die Produktion","Weist Trainings bei erkannten Lücken automatisch zu","Compliance-Doku, digitale Unterschriften, Auditnachweise","Erweitert bestehendes LMS, Echtzeit-Reporting"],
+      pos:["„Autopilot für Qualifizierung“ auf dem Shopfloor","Für komplexe Fertigung: Mehrwerk, Mehrvariante","Ersetzt manuelle Excel-Skillmatrizen"],
+      atk:"Fertigung statt Vertrieb. Kein Wettbewerb." },
+
+    { c:"G", name:"Pando", url:"https://www.pando.com/", meta:"HR-Performance",
+      n:0, k:3, z:2, tags:["Performance","Karrierepfade","Kein Sales"],
+      why:"HR-Performance-Software ohne Trainings- oder Simulationsprodukt.",
+      funcs:["Laufendes Performance-Tracking statt Jahresgespräch","Karriere-Frameworks, Leveling, Kompetenzpfade","Ziele/OKR-Management plus Kalibrierung für Beförderungen","KI-gestützte Check-ins und strukturiertes Feedback"],
+      pos:["„Just-in-time career progression“, keine Review-Cycle-Software","Karriereentwicklung für alle, nicht nur Top-Performer","Bias-Reduktion / DEI-Winkel · HR-Performance, kein Sales"],
+      atk:"Anderer Markt, anderer Buyer. Kein Wettbewerb." },
+
+    { c:"G", name:"evoach", url:"https://www.evoach.com/", meta:"Karlsruhe · sehr klein",
+      n:2, k:1, z:3, tags:["Chatbot-Coaching","No-Code","Akademisch"],
+      why:"Chatbot-basierte Coaching-Module für Coaches. Kein Rollenspiel, sehr klein.",
+      funcs:["Chatbot-basierte Coaching-Module","No-Code „Coaching Creator“ für Coaches"],
+      pos:["Kein Rollenspiel, sehr klein, akademisch angebunden"],
+      atk:"Chatbot statt Sprachsimulation, keine Sales-Methodik. Kein Risiko." },
+
+    { c:"G", name:"Swiss Sales Academy", url:"https://www.swiss-sales-academy.com/", meta:"Triesenberg (LI)",
+      n:2, k:1, z:4, tags:["Klassischer Trainer","CH-Kanal"],
+      why:"Klassischer Trainer mit KI als Seminarinhalt. Relevant höchstens als Schweizer Kanal- oder Reseller-Ziel.",
+      funcs:["Klassisches Trainingsangebot","KI als Seminarinhalt, kein Simulationsprodukt"],
+      pos:["Relevant höchstens als Schweizer Kanal-/Reseller-Ziel"],
+      atk:"Kein Produkt, kein Wettbewerb. Als CH-Reseller ansprechen." },
+
+    /* ── H ──────────────────────────────────────────────────────────── */
+    { c:"H", dead:1, name:"Peers Solutions", url:"https://peers-solutions.com/", meta:"Insolvenzverfahren März 2025 · von edyoucated übernommen",
+      n:0, k:0, z:0, tags:["Tot","Insolvenz 3/2025","Domain gekapert"],
+      why:"Insolvenzverfahren im März 2025, von edyoucated übernommen. Die Domain zeigt heute eine Online-Casino-Affiliate-Seite.",
+      funcs:["War: KI-Skillmanagement und Soft-Skills-Training, Berlin"],
+      pos:["Insolvenzverfahren März 2025, von edyoucated übernommen","Domain zeigt heute eine Online-Casino-Affiliate-Seite"],
+      atk:"Aus der Wettbewerbsliste streichen. Falls Kunden noch danach fragen: die Domain ist gekapert, nicht verlinken." },
+
+    { c:"H", dead:1, name:"Zavvy", url:"https://www.zavvy.io/", meta:"von Deel übernommen (Feb 2024) · heute „Deel Engage“",
+      n:0, k:0, z:0, tags:["Übernommen","Deel Engage","War HR"],
+      why:"Von Deel übernommen und als „Deel Engage“ fortgeführt. Die Site ist ein Rebranding-Funnel.",
+      funcs:["War: People Development, Performance, Onboarding — HR, kein Sales"],
+      pos:["Von Deel übernommen (Feb. 2024), läuft heute als „Deel Engage“","Site ist ein Rebranding-Funnel, kein eigenständiges Produkt"],
+      atk:"Kein eigenständiges Produkt mehr. Streichen." },
+
+    { c:"H", dead:1, name:"Sana", url:"https://www.sana.ai/", meta:"von Workday übernommen, Abschluss 04.11.2025 · ca. 1,1 Mrd. $",
+      n:0, k:0, z:0, tags:["Übernommen","Workday","Kein Role-Play"],
+      why:"Von Workday übernommen. Produkt läuft als „Sana Agents“ und „Sana Learn“ weiter — aber ohne Rollenspiel.",
+      funcs:["Produkt läuft weiter: „Sana Agents“ plus „Sana Learn“ als KI-natives LMS","Kein Role-Play"],
+      pos:["Von Workday übernommen, Abschluss 04.11.2025, ca. 1,1 Mrd. USD","Kein Role-Play — angrenzend, nicht direkt"],
+      atk:"Kein Rollenspiel. Als Workday-Teil künftig eher Integrations- als Wettbewerbsthema." }
+  ];
+
+  const FAZIT = [
+    ["Retorio ist der Platzhirsch — nicht die Startups", "Ältester Anbieter im Feld, echte Enterprise-Logos, 9 Mio. € Kapital. Aber seit November 2023 keine Runde mehr."],
+    ["Die Incumbents mit neuem Modul sind gefährlicher", "CoachHub AIMY 2.0, PINKTUM, Speexx, 3spin sitzen auf dem L&D-Rahmenvertrag und können das Feature kostenlos dazulegen."],
+    ["Gong und Seismic treffen euch im Enterprise", "Deutsche Website, EU-Hosting, Analystendeckung. Angreifbar über Szenariotiefe und deutschsprachige Gesprächsqualität — nicht über Plattformbreite."],
+    ["DSGVO ist kein USP mehr", "EU-Hosting, ISO 27001, EU AI Act führt inzwischen jeder deutsche Anbieter — und auch TrainHQ aus den USA. Eintrittskarte, nicht Differenzierung."],
+    ["Der Preisdruck von unten wird real", "Vertriebs AI ca. 17 €/Trainingsstunde, Trainexus 30 €/h, careertrainer ab 19 €/Monat, Pitchbase ab 9 €/Monat. Nutzungsmodelle greifen Seat-Preise direkt an."],
+    ["Der Trainer-Kanal ist ein stiller Angriff", "careertrainer, Chambr und TALKMEISTER bewaffnen per White-Label genau die deutschen Vertriebstrainer, die sonst Kunden oder Partner wären. DIV macht es bereits für sleak.ai."],
+    ["Zwei Quereinsteiger im Blick behalten", "Demodesk hat die Gesprächsdaten und die deutsche KI-Sales-Coaching-Marke. Sharpist ist finanziert und stellt KI-Produktrollen ein. Je eine Produktentscheidung entfernt."]
+  ];
+
+  /* ── Derive ───────────────────────────────────────────────────────── */
+  const LVL = {
+    kritisch:   { i:4, label:"Kritisch",   c:"var(--t-4)", w:"var(--t-4-wash)" },
+    hoch:       { i:3, label:"Hoch",       c:"var(--t-3)", w:"var(--t-3-wash)" },
+    mittel:     { i:2, label:"Mittel",     c:"var(--t-2)", w:"var(--t-2-wash)" },
+    niedrig:    { i:1, label:"Niedrig",    c:"var(--t-1)", w:"var(--t-1-wash)" },
+    beobachten: { i:0, label:"Beobachten", c:"var(--t-0)", w:"var(--t-0-wash)" },
+    erledigt:   { i:-1, label:"Erledigt",  c:"var(--t-x)", w:"var(--t-0-wash)" }
+  };
+  const levelOf = s => s >= 75 ? "kritisch" : s >= 60 ? "hoch" : s >= 45 ? "mittel" : s >= 30 ? "niedrig" : "beobachten";
+
+  D.forEach((d, i) => {
+    d.id = "e" + i;
+    d.score = Math.round(d.n * 3.8 + d.k * 3.0 + d.z * 3.2);
+    d.lvl = d.dead ? "erledigt" : levelOf(d.score);
+    d.force = d.k * 0.48 + d.z * 0.52;
+    d.hay = [d.name, d.meta, d.why, d.atk, d.c, LVL[d.lvl].label, ...(d.tags || []),
+             ...(d.funcs || []), ...(d.pos || [])].join(" ").toLowerCase();
+  });
+
+  const ALIVE = D.filter(d => !d.dead);
+  const state = { q: "", lvls: new Set(), cat: "*", sort: "score", table: false };
+  const el = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+
+  const matches = d =>
+    (state.cat === "*" || d.c === state.cat) &&
+    (state.lvls.size === 0 || state.lvls.has(d.lvl)) &&
+    (state.q === "" || d.hay.includes(state.q));
+
+  /* ── Tiles ────────────────────────────────────────────────────────── */
+  (() => {
+    const crit = D.filter(d => d.lvl === "kritisch").length;
+    const hoch = D.filter(d => d.lvl === "hoch").length;
+    const tiles = [
+      { v: D.length, k: "Anbieter im Report", d: "über 9 Gruppen, von Pure Play bis abgeschaltet" },
+      { v: crit, k: "Kritische Bedrohungen", d: "Score 75+ — hier braucht jeder Deal eine Antwort", crit: 1 },
+      { v: hoch, k: "Hohe Bedrohungen", d: "Score 60–74 — regelmäßig im Wettbewerb" },
+      { v: D.filter(d => d.c === "B").length, k: "Incumbents rüsten nach", d: "sitzen schon auf dem L&D-Rahmenvertrag" },
+      { v: D.filter(d => (d.tags || []).includes("Preisdruck")).length, k: "Greifen den Seat-Preis an", d: "Stundensätze ab 17 €, Monatstarife ab 9 €" }
+    ];
+    el("tiles").innerHTML = tiles.map(t => `<div class="tile${t.crit ? " is-crit" : ""}">
+      <div class="tile-v">${t.v}</div><div class="tile-k">${t.k}</div><div class="tile-d">${t.d}</div></div>`).join("");
+  })();
+
+  /* ── Toolbar ──────────────────────────────────────────────────────── */
+  el("lvlchips").innerHTML = ["kritisch", "hoch", "mittel", "niedrig", "beobachten", "erledigt"]
+    .map(k => `<button class="chip" type="button" data-lvl="${k}" aria-pressed="false">
+      <span class="dot"></span>${LVL[k].label} <span class="num">${D.filter(d => d.lvl === k).length}</span></button>`).join("");
+
+  const SHORT = { A1: "Pure Play DACH", A2: "International in DACH", B: "Incumbents rüsten nach",
+    C: "Angrenzend DACH", D: "Plattform-Modul", E: "Andere Zielgruppe",
+    F: "Watchlist", G: "Anderer Markt", H: "Nicht mehr relevant" };
+  el("cat").innerHTML = `<option value="*">Alle Gruppen (${D.length})</option>` +
+    CATS.map(([k]) => `<option value="${k}">${k} · ${SHORT[k]} (${D.filter(d => d.c === k).length})</option>`).join("");
+
+  /* ── Matrix ───────────────────────────────────────────────────────── */
+  const MX = { w: 900, h: 520, l: 58, r: 22, t: 26, b: 62 };
+  const px = v => MX.l + (v / 10) * (MX.w - MX.l - MX.r);
+  const py = v => MX.h - MX.b - (v / 10) * (MX.h - MX.t - MX.b);
+
+  function layoutPoints() {
+    const buckets = new Map();
+    ALIVE.forEach(d => {
+      const key = Math.round(d.n * 2) + "|" + Math.round(d.force * 2);
+      if (!buckets.has(key)) buckets.set(key, []);
+      buckets.get(key).push(d);
+    });
+    buckets.forEach(list => {
+      list.sort((a, b) => b.score - a.score);
+      list.forEach((d, i) => {
+        if (i === 0) { d.dx = 0; d.dy = 0; return; }
+        const ring = Math.ceil(i / 6), slot = (i - 1) % 6;
+        const a = slot * (Math.PI / 3) + ring * 0.55, rad = 8.5 * ring;
+        d.dx = Math.cos(a) * rad;
+        d.dy = Math.sin(a) * rad;
+      });
+    });
+  }
+  layoutPoints();
+
+  function drawMatrix() {
+    const g = [];
+    g.push(`<rect x="${px(6.5)}" y="${py(10)}" width="${px(10) - px(6.5)}" height="${py(6) - py(10)}" fill="var(--t-4-wash)" opacity=".45"/>`);
+    for (let v = 0; v <= 10; v += 2) {
+      g.push(`<line class="grid-line" x1="${px(v)}" y1="${py(0)}" x2="${px(v)}" y2="${py(10)}"/>`);
+      g.push(`<line class="grid-line" x1="${px(0)}" y1="${py(v)}" x2="${px(10)}" y2="${py(v)}"/>`);
+      g.push(`<text class="axis-t" x="${px(v)}" y="${py(0) + 17}" text-anchor="middle">${v}</text>`);
+      g.push(`<text class="axis-t" x="${MX.l - 9}" y="${py(v) + 4}" text-anchor="end">${v}</text>`);
+    }
+    g.push(`<line class="axis-line" x1="${px(0)}" y1="${py(0)}" x2="${px(10)}" y2="${py(0)}"/>`);
+    g.push(`<line class="axis-line" x1="${px(0)}" y1="${py(0)}" x2="${px(0)}" y2="${py(10)}"/>`);
+    g.push(`<text class="axis-l" x="${px(5)}" y="${MX.h - 14}" text-anchor="middle">Nähe zum eigenen Angebot →</text>`);
+    g.push(`<text class="axis-l" transform="translate(15,${py(5)}) rotate(-90)" text-anchor="middle">Durchsetzungskraft in DACH →</text>`);
+    g.push(`<text class="quad-l" x="${px(9.85)}" y="${py(9.6)}" text-anchor="end">Direkte Gefahr</text>`);
+    g.push(`<text class="quad-l" x="${px(0.25)}" y="${py(9.6)}">Bündel-Risiko</text>`);
+    g.push(`<text class="quad-l" x="${px(9.85)}" y="${py(0.35)}" text-anchor="end">Preis- &amp; Produktdruck</text>`);
+
+    ALIVE.forEach(d => {
+      const x = px(d.n) + d.dx, y = py(d.force) + d.dy;
+      const c = LVL[d.lvl].c, r = d.lvl === "kritisch" ? 7.5 : d.lvl === "hoch" ? 6.5 : 5.5;
+      g.push(`<g class="pt${d.w ? " is-watch" : ""}" style="--c:${c}" data-id="${d.id}" tabindex="0" role="button"
+        aria-label="${esc(d.name)}, ${LVL[d.lvl].label}, Score ${d.score}${d.w ? ", Watchlist" : ""}">
+        <circle class="pt-hit" cx="${x}" cy="${y}" r="15"/>
+        <circle class="mark" cx="${x}" cy="${y}" r="${r}"/>
+      </g>`);
+    });
+
+    const mx = px(10), my = py(4.4);
+    g.push(`<g class="me"><rect x="${mx - 7}" y="${my - 7}" width="14" height="14" rx="2"
+      transform="rotate(45 ${mx} ${my})" fill="var(--accent)" stroke="var(--lime)" stroke-width="2.5"/></g>`);
+
+    /* Only the critical tier is directly labelled; the rest live in the tooltip,
+       the ranking and the table. Same-side labels are de-collided vertically. */
+    const labels = D.filter(d => d.lvl === "kritisch").map(d => ({
+      text: d.name.split(" (")[0].split(" — ")[0],
+      x: px(d.n) + d.dx, y: py(d.force) + d.dy, flip: d.n > 8.4
+    }));
+    labels.push({ text: "Eure Position", x: mx, y: my, flip: true });
+
+    [true, false].forEach(side => {
+      const set = labels.filter(l => l.flip === side).sort((a, b) => a.y - b.y);
+      for (let i = 1; i < set.length; i++) {
+        const gap = set[i].y - set[i - 1].y;
+        if (gap < 15) set[i].y = set[i - 1].y + 15;
+      }
+    });
+
+    labels.forEach(l => {
+      g.push(`<text class="dot-label" x="${l.flip ? l.x - 13 : l.x + 12}" y="${l.y + 4}"
+        text-anchor="${l.flip ? "end" : "start"}">${esc(l.text)}</text>`);
+    });
+
+    const svg = el("mx");
+    svg.setAttribute("viewBox", `0 0 ${MX.w} ${MX.h}`);
+    svg.innerHTML = g.join("");
+  }
+  drawMatrix();
+
+  /* ── Tooltip ──────────────────────────────────────────────────────── */
+  const tip = el("tip");
+  function showTip(d, ev) {
+    tip.innerHTML = `<div class="tip-n">${esc(d.name)}</div>
+      <div class="tip-r"><span>${d.c} · ${LVL[d.lvl].label}</span><span>Score ${d.score}</span></div>
+      <div class="tip-hr"></div>
+      <div class="tip-r"><span>Nähe</span><span>${d.n}/10</span></div>
+      <div class="tip-r"><span>Kraft</span><span>${d.k}/10</span></div>
+      <div class="tip-r"><span>Zugang</span><span>${d.z}/10</span></div>`;
+    tip.classList.add("on");
+    const pad = 14, r = tip.getBoundingClientRect();
+    let x = ev.clientX + pad, y = ev.clientY + pad;
+    if (x + r.width > innerWidth - 8) x = ev.clientX - r.width - pad;
+    if (y + r.height > innerHeight - 8) y = ev.clientY - r.height - pad;
+    tip.style.left = Math.max(8, x) + "px";
+    tip.style.top = Math.max(8, y) + "px";
+  }
+  const hideTip = () => tip.classList.remove("on");
+
+  el("mx").addEventListener("mousemove", e => {
+    const g = e.target.closest(".pt");
+    if (!g) return hideTip();
+    const d = D.find(x => x.id === g.dataset.id);
+    if (d) showTip(d, e);
+  });
+  el("mx").addEventListener("mouseleave", hideTip);
+  el("mx").addEventListener("click", e => {
+    const g = e.target.closest(".pt");
+    if (g) jump(g.dataset.id);
+  });
+  el("mx").addEventListener("keydown", e => {
+    const g = e.target.closest(".pt");
+    if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); jump(g.dataset.id); }
+  });
+
+  /* ── Rank ─────────────────────────────────────────────────────────── */
+  function drawRank() {
+    const top = ALIVE.filter(matches).sort((a, b) => b.score - a.score).slice(0, 16);
+    el("rank").innerHTML = top.length ? top.map((d, i) => `
+      <button class="rank-row" type="button" data-id="${d.id}">
+        <span class="rank-i">${String(i + 1).padStart(2, "0")}</span>
+        <span class="rank-n">${esc(d.name)}<small>${d.c} · ${LVL[d.lvl].label}</small></span>
+        <span class="rank-track"><span class="rank-fill" style="width:${d.score}%;background:${LVL[d.lvl].c}"></span></span>
+        <span class="rank-s">${d.score}</span>
+      </button>`).join("") : `<div class="sec-empty">Keine Treffer für diese Filter.</div>`;
+  }
+
+  /* ── Cards ────────────────────────────────────────────────────────── */
+  function card(d) {
+    const L = LVL[d.lvl];
+    const tags = (d.tags || []).map(t =>
+      `<span class="tag${/Preisdruck|White-Label|Bündel|Kanalbedrohung|Rahmenvertrag|Datenmoat/i.test(t) ? " hot" : ""}">${esc(t)}</span>`).join("");
+    const ss = [["Nähe zum Angebot", d.n], ["Kraft &amp; Kapital", d.k], ["Zugang zu DACH", d.z]].map(([k, v]) =>
+      `<div class="ss"><span class="ss-k">${k}</span><span class="ss-t"><span class="ss-f" style="width:${v * 10}%"></span></span><span class="ss-v">${v}/10</span></div>`).join("");
+
+    return `<article class="card${d.dead ? " is-dead" : ""}" id="${d.id}"
+        style="--lvl:${L.c};--lvl-ink:${L.c};--lvl-wash:${L.w}" data-id="${d.id}">
+      <button class="card-head" type="button" aria-expanded="false" aria-controls="${d.id}-b">
+        <div class="card-top">
+          <div class="card-name">${esc(d.name)}${d.star ? ` <span class="star" title="${esc(d.star)}">★</span>` : ""}</div>
+          <div class="score-box">
+            <div class="score-v">${d.dead ? "—" : d.score}</div>
+            <div class="score-l">${L.label}</div>
+          </div>
+        </div>
+        ${d.dead ? "" : `<div class="meter"><i style="width:${d.score}%"></i></div>`}
+        <div class="card-meta">${esc(d.meta)}</div>
+        ${d.star ? `<div class="card-meta" style="color:var(--lime-ink)">★ ${esc(d.star)}</div>` : ""}
+        <div class="card-why">${esc(d.why)}</div>
+        <div class="tagrow">${tags}</div>
+        <div class="expander"><span class="caret">▸</span><span>Details</span></div>
+      </button>
+      <div class="card-body" id="${d.id}-b">
+        <div class="blk"><div class="blk-h">Kernfunktionen</div>
+          <ul>${(d.funcs || []).map(f => `<li>${esc(f)}</li>`).join("")}</ul></div>
+        <div class="blk"><div class="blk-h">Positionierung / USP</div>
+          <ul>${(d.pos || []).map(f => `<li>${esc(f)}</li>`).join("")}</ul></div>
+        <div class="blk"><div class="attack"><b>Angriffspunkt</b>${esc(d.atk)}</div></div>
+        <div class="blk"><div class="blk-h">Bewertung</div><div class="subscores">${ss}</div></div>
+        <div class="src"><a href="${esc(d.url)}" target="_blank" rel="noopener noreferrer">${esc(d.url)}</a></div>
+      </div>
+    </article>`;
+  }
+
+  function drawCards() {
+    const order = { score: (a, b) => b.score - a.score, name: (a, b) => a.name.localeCompare(b.name, "de"), naehe: (a, b) => b.n - a.n || b.score - a.score };
+    const open = new Set([...document.querySelectorAll('.card-head[aria-expanded="true"]')]
+      .map(b => b.closest(".card").dataset.id));
+
+    el("sections").innerHTML = CATS.map(([k, title, note]) => {
+      const items = D.filter(d => d.c === k).filter(matches).sort(order[state.sort]);
+      if (!items.length) return "";
+      return `<section class="rise" style="padding-top:44px">
+        <div class="sec-head">
+          <div class="eyebrow">${k} · ${items.length} ${items.length === 1 ? "Anbieter" : "Anbieter"}</div>
+          <h2>${esc(title)}</h2>
+          <p>${esc(note)}</p>
+        </div>
+        <div class="cards">${items.map(card).join("")}</div>
+      </section>`;
+    }).join("") || `<div class="sec-empty">Keine Treffer. Filter zurücksetzen oder anders suchen.</div>`;
+
+    open.forEach(id => {
+      const c = document.getElementById(id);
+      if (c) toggle(c.querySelector(".card-head"), true);
+    });
+  }
+
+  function toggle(btn, force) {
+    const body = btn.nextElementSibling;
+    const nowOpen = force !== undefined ? force : btn.getAttribute("aria-expanded") !== "true";
+    btn.setAttribute("aria-expanded", String(nowOpen));
+    body.classList.toggle("open", nowOpen);
+    btn.querySelector(".expander span:last-child").textContent = nowOpen ? "Schließen" : "Details";
+  }
+
+  /* ── Table ────────────────────────────────────────────────────────── */
+  function drawTable() {
+    const rows = D.filter(matches).sort((a, b) => b.score - a.score);
+    el("tablehost").innerHTML = `<table><thead><tr>
+        <th>Anbieter</th><th>Gruppe</th><th>Stufe</th><th>Score</th>
+        <th>Nähe</th><th>Kraft</th><th>Zugang</th><th>Kontext</th></tr></thead><tbody>
+      ${rows.map(d => `<tr>
+        <td><a href="${esc(d.url)}" target="_blank" rel="noopener noreferrer">${esc(d.name)}</a></td>
+        <td class="n">${d.c}</td>
+        <td><span class="lvlpill" style="--lvl:${LVL[d.lvl].c};--lvl-wash:${LVL[d.lvl].w}">${LVL[d.lvl].label}</span></td>
+        <td class="n">${d.dead ? "—" : d.score}</td>
+        <td class="n">${d.n}</td><td class="n">${d.k}</td><td class="n">${d.z}</td>
+        <td>${esc(d.meta)}</td></tr>`).join("")}
+    </tbody></table>`;
+  }
+
+  /* ── Fazit ────────────────────────────────────────────────────────── */
+  el("fazit").innerHTML = FAZIT.map(([h, p], i) =>
+    `<div class="fz"><div class="fz-i">Befund ${i + 1} von 7</div><div class="fz-h">${esc(h)}</div><div class="fz-p">${esc(p)}</div></div>`).join("");
+
+  /* ── Wiring ───────────────────────────────────────────────────────── */
+  function render() {
+    drawRank();
+    drawCards();
+    if (state.table) drawTable();
+    const n = D.filter(matches).length;
+    el("hits").textContent = n === D.length ? `${D.length} Anbieter` : `${n} von ${D.length}`;
+    document.querySelectorAll(".pt").forEach(g => {
+      const d = D.find(x => x.id === g.dataset.id);
+      g.classList.toggle("is-dim", !(d && matches(d)));
+    });
+    el("expandAll").textContent = "Alle aufklappen";
+  }
+
+  function jump(id) {
+    const c = document.getElementById(id);
+    if (!c) {
+      state.q = ""; state.lvls.clear(); state.cat = "*";
+      el("q").value = ""; el("cat").value = "*";
+      document.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", "false"));
+      render();
+      return requestAnimationFrame(() => jump(id));
+    }
+    const btn = c.querySelector(".card-head");
+    if (btn.getAttribute("aria-expanded") !== "true") toggle(btn, true);
+    c.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+    document.querySelectorAll(".card.is-target").forEach(x => x.classList.remove("is-target"));
+    c.classList.add("is-target");
+    setTimeout(() => c.classList.remove("is-target"), 2200);
+  }
+
+  let t = null;
+  el("q").addEventListener("input", e => {
+    clearTimeout(t);
+    const v = e.target.value.trim().toLowerCase();
+    t = setTimeout(() => { state.q = v; render(); }, 130);
+  });
+  el("cat").addEventListener("change", e => { state.cat = e.target.value; render(); });
+  el("sort").addEventListener("change", e => { state.sort = e.target.value; render(); });
+  el("lvlchips").addEventListener("click", e => {
+    const b = e.target.closest(".chip");
+    if (!b) return;
+    const k = b.dataset.lvl, on = b.getAttribute("aria-pressed") === "true";
+    b.setAttribute("aria-pressed", String(!on));
+    on ? state.lvls.delete(k) : state.lvls.add(k);
+    render();
+  });
+  el("expandAll").addEventListener("click", e => {
+    const heads = [...document.querySelectorAll(".card-head")];
+    const anyClosed = heads.some(h => h.getAttribute("aria-expanded") !== "true");
+    heads.forEach(h => toggle(h, anyClosed));
+    e.currentTarget.textContent = anyClosed ? "Alle einklappen" : "Alle aufklappen";
+  });
+  el("tableBtn").addEventListener("click", e => {
+    state.table = !state.table;
+    e.currentTarget.setAttribute("aria-pressed", String(state.table));
+    el("table-sec").hidden = !state.table;
+    if (state.table) { drawTable(); el("table-sec").scrollIntoView({ behavior: "smooth", block: "start" }); }
+  });
+  el("sections").addEventListener("click", e => {
+    const h = e.target.closest(".card-head");
+    if (h) toggle(h);
+  });
+  el("rank").addEventListener("click", e => {
+    const r = e.target.closest(".rank-row");
+    if (r) jump(r.dataset.id);
+  });
+  addEventListener("scroll", hideTip, { passive: true });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
