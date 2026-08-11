@@ -680,6 +680,7 @@
     color: var(--ink);
   }
   [hidden] { display: none !important; }
+  .print-only { display: none !important; }
 
   /* ── Fazit ───────────────────────────────────────────────────────────── */
   .fazit { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 14px; }
@@ -729,6 +730,106 @@
 
   .rise { animation: rise .5s cubic-bezier(.2,.7,.3,1) both; }
   @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  /* ── Print ───────────────────────────────────────────────────────────
+     The static edition: every dossier open, no controls, the data table
+     as an appendix. The full light palette is restated here so a reader
+     printing from a dark-themed browser still gets ink on paper. */
+  @media print {
+    :root {
+      color-scheme: light;
+      --page: #FFFFFF;   --surface: #FFFFFF;  --surface-2: #F3F6F5;
+      --ink: #121A19;    --ink-2: #3D4948;    --ink-3: #6B7877;
+      --rule: #D3DAD8;   --rule-2: #B8C2C0;
+      --accent: #0E5B54; --accent-soft: #E2EDEB;
+      --lime: #7E9E10;   --lime-ink: #46590A;
+      --t-1: #E39C8B;    --t-2: #D4704F;      --t-3: #BE4530;  --t-4: #8F2119;
+      --t-0: #B3BEBC;    --t-x: #98A3A1;
+      --t-1-wash: #FBEDE9; --t-2-wash: #FAE7E0; --t-3-wash: #F8E2DC;
+      --t-4-wash: #F5DED9; --t-0-wash: #EDF0EF;
+      --shadow: none;
+    }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { font-size: 9.5pt; background: #fff; }
+    .wrap { max-width: none; padding: 0; }
+
+    /* Controls, hover affordances and click hints carry no meaning on paper */
+    .toolbar, .tip, .expander, .screen-only { display: none !important; }
+    .print-only { display: inline !important; }
+    .rise { animation: none; opacity: 1; transform: none; }
+
+    .masthead { padding: 0 0 8mm; }
+    .masthead h1 { font-size: 34pt; }
+    .lede { font-size: 11pt; }
+    .tiles { break-inside: avoid; }
+    .tile-v { font-size: 24pt; }
+
+    section { padding-top: 9mm; scroll-margin-top: 0; }
+    #matrix-sec, #rank-sec, #table-sec, #fazit-sec { break-before: page; }
+    .sec-head { break-after: avoid; }
+    .sec-head h2 { font-size: 16pt; }
+    .sec-head p, .note { font-size: 9.5pt; }
+    /* Only the chart must survive whole; the table and ranking may span pages,
+       otherwise Chromium pushes them and leaves the heading on a blank page. */
+    .panel { box-shadow: none; }
+    #matrix-sec .panel { break-inside: avoid; }
+
+    .matrix-wrap { overflow: visible; padding: 4mm 2mm 0; }
+    .matrix { min-width: 0; width: 100%; }
+    .legend { padding: 3mm 2mm 4mm; }
+
+    .rank { padding: 0 2mm 3mm; }
+    .rank-row { padding: 4px 2px; break-inside: avoid; }
+
+    /* Full-width cards, content flowing through two balanced columns — a
+       column flow packs tighter than a grid, which pads every row to the
+       tallest cell. Two dossiers per page instead of one. */
+    .cards { display: block; }
+    .card {
+      break-inside: avoid;
+      margin-bottom: 3.5mm;
+      border-left-width: 4px;
+    }
+    .card-head { padding: 7px 10px; cursor: auto; }
+    .card-name { font-size: 11.5pt; }
+    .score-v { font-size: 13pt; }
+    .meter { margin: 7px 0; }
+    .card-why { font-size: 9pt; margin-top: 6px; }
+    .tagrow { margin-top: 7px; gap: 4px; }
+    .card-body {
+      display: block !important;
+      column-count: 2;
+      column-gap: 7mm;
+      padding: 9px 10px 10px;
+    }
+    .blk + .blk { margin-top: 9px; }
+    .blk-h { break-after: avoid; padding-bottom: 4px; margin-bottom: 6px; }
+    .blk li { font-size: 8.5pt; margin: 2px 0; }
+    .attack { font-size: 9pt; padding: 8px 10px; }
+    /* Three bar rows collapse to one line; the numbers carry it on paper */
+    .subscores { display: flex; flex-wrap: wrap; gap: 2mm 5mm; }
+    .ss { display: flex; grid-template-columns: none; gap: 5px; }
+    .ss-t { display: none; }
+    .src { margin-top: 8px; }
+    .src a { color: var(--ink-2); text-decoration: none; }
+
+    /* The table is the colour-independent record — always in the printout */
+    #table-sec[hidden] { display: block !important; }
+    table { font-size: 8.5pt; }
+    thead { display: table-header-group; }
+    th { position: static; }
+    tr { break-inside: avoid; }
+    th, td { padding: 4px 7px; }
+
+    /* Three columns for the seven findings: 3 rows instead of 4, which keeps
+       the colophon on the same page rather than orphaning it. */
+    .fazit { grid-template-columns: repeat(3, 1fr); gap: 3.5mm; }
+    .fz { break-inside: avoid; padding: 12px; }
+    .fz-h { font-size: 10.5pt; }
+    .fz-p { font-size: 8.5pt; }
+    footer { margin-top: 6mm; }
+  }
+  @page { size: A4 portrait; margin: 14mm 12mm 16mm; }
 </style>
 
 <header class="wrap masthead">
@@ -744,6 +845,7 @@
     <span>Stand 11.08.2026</span>
     <span>Quelle: Firmen-Websites, OMR Reviews, Presse</span>
     <span>Sortiert nach Nähe zum eigenen Angebot</span>
+    <span class="print-only">Statische Druckfassung · die Online-Version filtert, sucht und sortiert</span>
   </div>
 </header>
 
@@ -774,7 +876,7 @@
       <p>
         Waagerecht: wie nah das Produkt an KI-Rollenspiel für Sales liegt. Senkrecht:
         wie gut sie es in DACH durchsetzen können — Kapital, Distribution, bestehender
-        Budgetzugang. Punkt anklicken öffnet das Dossier.
+        Budgetzugang. <span class="screen-only">Punkt anklicken öffnet das Dossier.</span>
       </p>
     </div>
     <div class="panel">
@@ -805,7 +907,8 @@
     <div class="sec-head">
       <div class="eyebrow">02 · Rangliste</div>
       <h2>Die 16 dringendsten Namen</h2>
-      <p>Zeile anklicken springt ins Dossier. Reagiert auf Suche und Filter.</p>
+      <p><span class="screen-only">Zeile anklicken springt ins Dossier. Reagiert auf Suche und
+        Filter.</span><span class="print-only">Nach Score absteigend, alle Gruppen außer H.</span></p>
     </div>
     <div class="panel"><div class="rank" id="rank"></div></div>
   </section>
@@ -823,7 +926,9 @@
     <div class="sec-head">
       <div class="eyebrow">03 · Dossiers</div>
       <h2>Alle Anbieter, gruppiert</h2>
-      <p>Karte anklicken zeigt Kernfunktionen, Positionierung und den Angriffspunkt.</p>
+      <p><span class="screen-only">Karte anklicken zeigt Kernfunktionen, Positionierung und den
+        Angriffspunkt.</span><span class="print-only">Vollständig, gruppiert wie im Ursprungsreport:
+        Kernfunktionen, Positionierung und Angriffspunkt je Anbieter.</span></p>
     </div>
     <div id="sections"></div>
   </section>
@@ -1734,7 +1839,7 @@
   function render() {
     drawRank();
     drawCards();
-    if (state.table) drawTable();
+    drawTable();   /* always populated so printing includes the appendix */
     const n = D.filter(matches).length;
     el("hits").textContent = n === D.length ? `${D.length} Anbieter` : `${n} von ${D.length}`;
     document.querySelectorAll(".pt").forEach(g => {

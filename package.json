@@ -1,0 +1,12 @@
+{
+  "name": "competitor-report",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "pdf": "node build.mjs && node makepdf.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}
