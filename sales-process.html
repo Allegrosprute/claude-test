@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sales Process Layers</title>
+<style>
+  :root{
+    color-scheme: light;
+    --bg:#f6f7f6; --panel:#ffffff; --ink:#131c1b; --muted:#5f6d6a;
+    --line:#e2e7e5; --line-strong:#cbd3d0; --chip:#f0f3f2;
+    --shadow:0 1px 2px rgba(19,28,27,.05), 0 8px 24px rgba(19,28,27,.06);
+    --ai:#0d9488; --assist:#65a30d; --human:#94a3b8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --bg:#0e1413; --panel:#161e1d; --ink:#e8efed; --muted:#96a5a2;
+      --line:#25302e; --line-strong:#36443f; --chip:#1d2726;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+      --ai:#2dd4bf; --assist:#a3e635; --human:#7c8a92;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  a{color:inherit}
+
+  header{max-width:1240px;margin:0 auto;padding:40px 24px 8px}
+  .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{margin:8px 0 6px;font-size:clamp(24px,3.2vw,34px);line-height:1.15;letter-spacing:-.02em}
+  .lede{margin:0;max-width:62ch;color:var(--muted)}
+
+  .controls{max-width:1240px;margin:20px auto 0;padding:0 24px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+  .legend{display:flex;flex-wrap:wrap;gap:6px}
+  .key{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);
+    background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--human)}
+  .key.ai .dot{background:var(--ai)} .key.assist .dot{background:var(--assist)}
+  .toggle{margin-left:auto;display:inline-flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);
+    cursor:pointer;user-select:none;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+  .toggle input{accent-color:var(--ai);margin:0}
+
+  main{max-width:1240px;margin:0 auto;padding:22px 24px 72px;
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;align-items:start}
+  @media (max-width:960px){ main{grid-template-columns:1fr} }
+
+  /* ---------- flow ---------- */
+  .flow{padding-left:104px;position:relative}
+  @media (max-width:960px){ .flow{padding-left:0} }
+
+  .node{width:100%;text-align:left;cursor:pointer;position:relative;
+    background:var(--panel);color:inherit;border:1px solid var(--line);border-left:4px solid var(--c,var(--line-strong));
+    border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);font:inherit;
+    transition:transform .14s ease, box-shadow .14s ease, border-color .14s ease}
+  .node:hover{transform:translateY(-1px);box-shadow:0 2px 4px rgba(0,0,0,.06),0 14px 32px rgba(0,0,0,.10)}
+  .node:focus-visible{outline:2px solid var(--c,var(--ai));outline-offset:3px}
+  .node.is-active{border-color:var(--c);background:
+    linear-gradient(0deg, color-mix(in srgb, var(--c) 7%, transparent), color-mix(in srgb, var(--c) 7%, transparent)), var(--panel)}
+  .node.optional{border-style:dashed;border-left-style:solid}
+
+  .node-top{display:flex;align-items:center;gap:10px}
+  .idx{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+    font-size:12px;font-weight:700;color:#fff;background:var(--c)}
+  .node h3{margin:0;font-size:16px;letter-spacing:-.01em;flex:1 1 auto}
+  .node .short{margin:6px 0 0;font-size:13px;color:var(--muted)}
+  .node-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+  .pill{font-size:11px;font-weight:600;letter-spacing:.02em;border-radius:999px;padding:3px 8px;
+    background:var(--chip);border:1px solid var(--line);color:var(--muted)}
+  .pill.opt{border-style:dashed}
+  .pill.count{margin-left:auto;background:transparent;border-color:transparent;font-weight:500}
+
+  .meter{display:flex;height:4px;border-radius:999px;overflow:hidden;background:var(--chip);margin-top:11px}
+  .meter span{display:block}
+  .meter .s-ai{background:var(--ai)} .meter .s-assist{background:var(--assist)} .meter .s-human{background:var(--human)}
+  body:not(.automation) .meter{opacity:.45}
+  body.automation .node{border-left-color:var(--auto)}
+  body.automation .idx{background:var(--auto)}
+
+  .gate{display:flex;align-items:center;gap:10px;padding:6px 0 6px 12px;min-height:44px}
+  .gate .rail{width:2px;align-self:stretch;background:var(--line-strong);border-radius:2px}
+  .gate.dashed .rail{background:repeating-linear-gradient(var(--line-strong) 0 4px,transparent 4px 8px)}
+  .gate .label{font-size:12px;color:var(--muted)}
+  .gate .label b{font-weight:600;color:var(--ink)}
+
+  .optgroup{position:relative}
+  .bypass{position:absolute;left:-88px;top:10px;bottom:-52px;width:74px;
+    border:2px dashed var(--line-strong);border-right:0;border-radius:14px 0 0 14px}
+  .bypass i{position:absolute;left:8px;top:50%;transform:translateY(-50%);
+    writing-mode:vertical-rl;font-style:normal;font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted);background:var(--bg);padding:6px 0}
+  @media (max-width:960px){ .bypass{display:none} }
+
+  /* ---------- detail panel ---------- */
+  .detail{position:sticky;top:22px;background:var(--panel);border:1px solid var(--line);
+    border-radius:18px;box-shadow:var(--shadow);padding:22px 22px 18px;min-height:420px}
+  @media (max-width:960px){ .detail{position:static} }
+  .detail .d-eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--c,var(--muted))}
+  .detail h2{margin:6px 0 4px;font-size:22px;letter-spacing:-.02em}
+  .detail .d-short{margin:0 0 14px;color:var(--muted);font-size:14px}
+  .detail .d-body{margin:0 0 16px}
+  .rowchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+
+  h4{margin:20px 0 8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .gates2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:520px){ .gates2{grid-template-columns:1fr} }
+  .box{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px}
+  .box .t{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+
+  ol.stages{list-style:none;margin:0;padding:0;counter-reset:st}
+  ol.stages li{counter-increment:st;position:relative;padding:11px 0 11px 34px;border-top:1px solid var(--line)}
+  ol.stages li:first-child{border-top:0}
+  ol.stages li::before{content:counter(st);position:absolute;left:0;top:12px;width:22px;height:22px;
+    border-radius:7px;display:grid;place-items:center;font-size:11px;font-weight:700;
+    background:var(--chip);border:1px solid var(--line);color:var(--muted)}
+  ol.stages .sname{font-weight:600;font-size:14px}
+  ol.stages .sdesc{margin:3px 0 0;font-size:13px;color:var(--muted)}
+  ol.stages .tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:2px 7px;margin-left:8px;
+    vertical-align:1px;border:1px solid var(--line);background:var(--chip);color:var(--muted)}
+  ol.stages li[data-lvl="ai"] .tag{color:var(--ai);border-color:color-mix(in srgb,var(--ai) 40%,var(--line))}
+  ol.stages li[data-lvl="assist"] .tag{color:var(--assist);border-color:color-mix(in srgb,var(--assist) 40%,var(--line))}
+  ol.stages li.exit .sname{color:var(--c)}
+  body.automation ol.stages li[data-lvl="ai"]{background:color-mix(in srgb,var(--ai) 7%,transparent)}
+  body.automation ol.stages li[data-lvl="assist"]{background:color-mix(in srgb,var(--assist) 7%,transparent)}
+
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tags span{font-size:12px;background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:3px 8px;color:var(--muted)}
+  .ainote{margin-top:18px;border:1px solid color-mix(in srgb,var(--ai) 35%,var(--line));
+    background:color-mix(in srgb,var(--ai) 7%,transparent);border-radius:12px;padding:11px 13px;font-size:13px}
+  .ainote .t{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ai);font-weight:700;margin-bottom:4px}
+
+  .dnav{display:flex;gap:8px;margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
+  .dnav button{flex:1 1 0;background:var(--chip);border:1px solid var(--line);color:var(--ink);
+    border-radius:10px;padding:9px 10px;font:inherit;font-size:13px;cursor:pointer;text-align:left}
+  .dnav button:hover:not(:disabled){border-color:var(--line-strong)}
+  .dnav button:disabled{opacity:.4;cursor:default}
+  .dnav .k{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .dnav .next{text-align:right}
+
+  /* ---------- tooltip ---------- */
+  #tip{position:fixed;z-index:50;max-width:300px;pointer-events:none;opacity:0;
+    transform:translateY(4px);transition:opacity .12s ease, transform .12s ease;
+    background:var(--ink);color:var(--bg);font-size:12.5px;line-height:1.45;
+    padding:9px 11px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.28)}
+  #tip.on{opacity:1;transform:translateY(0)}
+  #tip b{color:inherit}
+
+  footer{max-width:1240px;margin:0 auto;padding:0 24px 60px;color:var(--muted);font-size:12.5px}
+  footer p{max-width:80ch}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Sales process</div>
+  <h1>Layers, stages and who runs them</h1>
+  <p class="lede">Seven layers from total market to expansion. Hover a layer for the short version, click it to see
+  the stages inside it, the entry and exit gates, and how much of it is already AI work.</p>
+</header>
+
+<div class="controls">
+  <div class="legend">
+    <span class="key ai"><i class="dot"></i>AI runs it</span>
+    <span class="key assist"><i class="dot"></i>AI drafts, human decides</span>
+    <span class="key"><i class="dot"></i>Human</span>
+  </div>
+  <label class="toggle"><input type="checkbox" id="autoToggle">Automation view</label>
+</div>
+
+<main>
+  <div class="flow" id="flow"></div>
+  <aside class="detail" id="detail" aria-live="polite"></aside>
+</main>
+
+<footer>
+  <p><b>Reading the chart:</b> layer 2 is optional, the dashed bypass on the left is the path you take when you go
+  straight from the whole market to signal-based prioritisation. <b>Won</b> is an opportunity stage and the doorway
+  into the Customers layer, so it appears in both. Accounts can move backwards: a decayed signal drops to layer 3,
+  a disqualified prospect drops out of layer 5, a lost deal returns to nurture.</p>
+</footer>
+
+<div id="tip" role="tooltip"></div>
+
+<script>
+const L = [
+  {
+    id:"target-accounts", name:"Target Accounts", short:"Total addressable market",
+    c:"#64748b", owners:["RevOps","AI"],
+    tip:"Every company you could plausibly sell to. One universe, deduplicated, ICP-checked, nothing prioritised yet.",
+    body:"The base universe. Every company that could plausibly buy, pulled from your sources, deduplicated and checked against the ICP definition. This layer answers <i>who exists</i>, not <i>who now</i>. Nothing here is worked directly; it is the pool that layers 2 and 3 draw from.",
+    entry:"Company appears in a source list and has not been seen before.",
+    exit:"Passes the ICP check and lands in the account universe, or is parked as out of ICP with a reason.",
+    inputs:["Data providers","LinkedIn / Apollo exports","Public registries","Conference & association lists","Existing CRM history"],
+    ai:"Sourcing, deduplication and enrichment are already AI work. The ICP definition itself stays human, because it encodes strategy, not data.",
+    stages:[
+      {n:"Raw record",d:"Company pulled from a source, unverified and unenriched.",lvl:"ai"},
+      {n:"Enriched",d:"Domain, headcount, region, industry, tech stack, funding and hiring data attached.",lvl:"ai"},
+      {n:"ICP check",d:"Firmographic filter decides in or out against the written ICP definition.",lvl:"assist"},
+      {n:"In TAM",d:"Passes the check and sits in the account universe, ready to be segmented or prioritised.",lvl:"ai",exit:true},
+      {n:"Out of ICP",d:"Parked with a reason so it is not re-pulled every cycle. Revisit when the ICP changes.",lvl:"ai"}
+    ]
+  },
+  {
+    id:"segmented-accounts", name:"Segmented Accounts", short:"Optional: a slice of the market with one angle",
+    c:"#0284c7", owners:["AE","SDR","AI"], optional:true,
+    tip:"Optional. Cut the market into a slice you want to attack with one specific message, for example SaaS companies hiring SDRs.",
+    body:"An optional layer. Instead of working the whole market, you define a slice and attack it with one angle: SaaS companies hiring SDRs, Series A startups in a given region, insurers with a field sales team. The value of segmenting is a sharper message and a comparable test group. Skip it when you would rather let signals do the selecting and go straight to layer 3.",
+    entry:"You decide to run a segment and write its criteria.",
+    exit:"Account matches the active segment definition and inherits its messaging angle, or stays in TAM.",
+    inputs:["Segment hypothesis","Firmographics","Hiring / job-posting data","Tech stack","Region & language","Funding stage"],
+    ai:"Matching accounts to criteria is AI work. Deciding which segment is worth a quarter of your attention is not.",
+    stages:[
+      {n:"Segment defined",d:"Hypothesis written as machine-checkable criteria plus the angle you will lead with.",lvl:"human"},
+      {n:"Criteria applied",d:"The account universe is matched against the definition.",lvl:"ai"},
+      {n:"In segment",d:"Account belongs to the active segment and carries its angle into outreach.",lvl:"ai",exit:true},
+      {n:"Multi-segment",d:"Matches more than one segment; pick a primary so the messaging does not collide.",lvl:"assist"},
+      {n:"No fit",d:"Stays in TAM and waits for a different segment or a signal.",lvl:"ai"}
+    ]
+  },
+  {
+    id:"prioritized-accounts", name:"Prioritized Accounts", short:"Signal says: approach this one first",
+    c:"#0d9488", owners:["SDR","AI"],
+    tip:"Accounts from the market or the active segment that a signal pushed to the front of the queue.",
+    body:"The queue. Accounts from the market or from the active segment that something says to approach <i>now</i>. Priority is signal-driven, never alphabetical: an inbound demo request, repeated website visits, a job posting for the role you sell to, a funding round, a common investor, a new exec hire, a competitor tool showing up. A signal has a shelf life, which is why this layer has a decay stage.",
+    entry:"A qualifying signal fires on an account that is in TAM or in the active segment.",
+    exit:"Tier assigned and the account enters the working queue, or the signal decays and it drops back to the pool.",
+    inputs:["Inbound: demo requests, form fills","Website visitors","Job postings","Funding & investor overlap","New exec hires","Tech-stack changes","Custom signals"],
+    ai:"Detection, deduplication and scoring are AI work, and this is where AI buys the most time. Judging a weak-but-interesting signal still needs a human.",
+    stages:[
+      {n:"Signal detected",d:"Raw event captured against the account, with source and timestamp.",lvl:"ai"},
+      {n:"Signal validated",d:"Checked for relevance and recency; noise and duplicates dropped.",lvl:"assist"},
+      {n:"Tier assigned",d:"A / B / C from signal strength, segment fit and account size. Tier sets the outreach effort.",lvl:"assist"},
+      {n:"In working queue",d:"Capacity assigned, account handed to layer 4 for lead mapping.",lvl:"assist",exit:true},
+      {n:"Signal decayed",d:"The window closed without action. Back to the pool until something fires again.",lvl:"ai"}
+    ]
+  },
+  {
+    id:"target-leads", name:"Target Leads", short:"The people inside the prioritized accounts",
+    c:"#16a34a", owners:["SDR","AI"],
+    tip:"The named people you sell to: buyers who own the problem, and amplifiers who open the door.",
+    body:"Accounts do not buy, people do. For every prioritised account you map the two kinds of people that matter: <b>buyers</b>, who own the problem and the budget, and <b>amplifiers</b>, who cannot sign but can get you through the door. Roles are defined per segment, so this layer is mostly the mechanical work of finding and verifying the named humans behind a role.",
+    entry:"Account is in the working queue and needs a buying committee mapped.",
+    exit:"At least one reachable buyer or amplifier with verified contact data, ready for outreach.",
+    inputs:["Role map per segment","LinkedIn / Apollo","Email & phone verification","Org charts","Past contacts in CRM"],
+    ai:"Finding people for a role and verifying contact data is AI work end to end. Which roles are worth approaching is a segment decision made once by a human.",
+    stages:[
+      {n:"Roles mapped",d:"Which titles matter in this account, and which of them are buyers vs. amplifiers.",lvl:"assist"},
+      {n:"Buyers identified",d:"Named people with authority over the problem you solve.",lvl:"ai"},
+      {n:"Amplifiers identified",d:"Practitioners, team leads and future champions who can open the door internally.",lvl:"ai"},
+      {n:"Contact verified",d:"Email, phone and LinkedIn checked, so outreach does not bounce.",lvl:"ai",exit:true},
+      {n:"No reachable lead",d:"Account is blocked at people level. Park it or send it back to layer 3.",lvl:"ai"}
+    ]
+  },
+  {
+    id:"prospecting", name:"Prospecting", short:"Companies and people you are trying to reach",
+    c:"#65a30d", owners:["SDR"],
+    tip:"Active outreach. From not contacted to a booked meeting, with nurture and disqualified as the two side doors.",
+    body:"Active outreach, and the first layer with real conversation in it. Every target lead moves through these stages exactly once per attempt cycle; the two side doors are nurture, for interest without timing, and disqualified, for a clean no. A booked meeting that is held and qualified is what promotes the account into an opportunity.",
+    entry:"A verified lead in a prioritised account is assigned to a sequence.",
+    exit:"Meeting booked, held and qualified as a real problem plus fit plus a potential project. Otherwise nurture or disqualified.",
+    inputs:["Email sequences","LinkedIn","Phone","Video / voice notes","Events","Referrals & warm intros"],
+    ai:"Research, first-draft personalisation, follow-up timing and reply classification are AI-assisted today. The conversation itself and the qualification call are human. This is the layer where full AI ownership will show up next.",
+    stages:[
+      {n:"Not contacted",d:"In the queue with a sequence assigned, nothing sent yet.",lvl:"assist"},
+      {n:"LinkedIn connected",d:"Connection accepted. Cheap first touch that makes later touches land warmer.",lvl:"assist"},
+      {n:"Contacting",d:"Sequence running across email, LinkedIn and phone. Replies routed by intent.",lvl:"assist"},
+      {n:"Meeting booked",d:"A slot is in the calendar. Held and qualified means it graduates to an opportunity.",lvl:"human",exit:true},
+      {n:"Nurture",d:"Real interest, wrong timing. Long cycle touches until a signal re-fires in layer 3.",lvl:"assist"},
+      {n:"Disqualified",d:"No problem, no fit or no authority. Recorded with a reason so it is not re-worked blindly.",lvl:"assist"}
+    ]
+  },
+  {
+    id:"opportunities", name:"Opportunities", short:"Accounts with a real buying conversation",
+    c:"#d97706", owners:["AE"],
+    tip:"A qualified problem, a fit and a potential project. This is the AE's forecastable pipeline.",
+    body:"Where a real buying conversation exists: a qualified problem, a fit and a plausible project. This is the forecastable pipeline and it is AE-owned end to end. Stages are gates, not activities, so each one moves only when something changed on the customer's side, not when you sent another email.",
+    entry:"Meeting held and qualified: real problem, fit and a potential project.",
+    exit:"Won, and the account moves into the Customers layer. Or lost, with a decision and a reason.",
+    inputs:["Discovery notes","Business case / ROI","Pilot scope","Security & legal review","Pricing & proposal"],
+    ai:"Call notes, summaries, CRM hygiene, follow-up drafts and business-case material are AI-assisted. Negotiation, commercial judgement and multi-threading stay human for now.",
+    stages:[
+      {n:"Discovery",d:"Meeting held and qualified: a real problem, a fit and a potential project are on the table.",lvl:"human"},
+      {n:"Evaluation",d:"The customer is seriously evaluating Brio: pilot, technical check, reference calls, internal comparison.",lvl:"assist"},
+      {n:"Commercial",d:"Pricing and proposal are on the table and being discussed.",lvl:"assist"},
+      {n:"Procurement",d:"Legal, security, purchasing, works council, contracts. Momentum is managed, not sold.",lvl:"assist"},
+      {n:"Won",d:"Signed. The account promotes into the Customers layer and hands over to onboarding.",lvl:"human",exit:true},
+      {n:"Lost",d:"A decision, not a silence. Reason recorded, and the account returns to nurture in layer 5.",lvl:"assist"}
+    ]
+  },
+  {
+    id:"customers", name:"Customers", short:"Won deals: success, renewal, expansion",
+    c:"#7c3aed", owners:["CS","AE"],
+    tip:"Won deals, where customer success and expansion do the work. Expansion re-enters the process as its own signal.",
+    body:"Won deals, where customer success carries the weight and expansion becomes the growth engine. The layer closes the loop: usage and success data are themselves signals, so an expansion opportunity re-enters at layer 3 and runs the same path again with a much shorter cycle.",
+    entry:"Contract signed and handed over from a won opportunity.",
+    exit:"Renewed and expanded, or churned with a reason that feeds back into the ICP definition.",
+    inputs:["Onboarding plan","Usage & adoption data","Success reviews","Renewal dates","Expansion signals"],
+    ai:"Usage monitoring, health scoring, renewal reminders and expansion-signal detection are AI work. The relationship is not.",
+    stages:[
+      {n:"Onboarding",d:"Kickoff, setup, first real usage. The point where the promised outcome starts becoming visible.",lvl:"assist"},
+      {n:"Live",d:"In production and adopted. Health tracked on usage, not on sentiment.",lvl:"ai"},
+      {n:"Renewal",d:"Value proven and the contract extended. Worked from the renewal date backwards, not from the reminder.",lvl:"assist"},
+      {n:"Expansion",d:"More seats, teams or use cases. Re-enters layer 3 as its own signal.",lvl:"assist",exit:true},
+      {n:"Churn risk / churned",d:"Health drops or the customer leaves. Reason recorded and fed back into the ICP.",lvl:"assist"}
+    ]
+  }
+];
+
+const GATES = [
+  "<b>Optional:</b> apply a segment definition",
+  "<b>Signal fires</b> on the account",
+  "<b>Map the buying committee</b>: buyers and amplifiers",
+  "<b>Start outreach</b> on verified contacts",
+  "<b>Meeting held &amp; qualified</b>: problem + fit + project",
+  "<b>Signed</b>: handover to onboarding"
+];
+const LVL = {ai:"AI", assist:"AI + human", human:"Human"};
+const AUTOC = {ai:"var(--ai)", assist:"var(--assist)", human:"var(--human)"};
+
+const flow = document.getElementById("flow");
+const detail = document.getElementById("detail");
+const tip = document.getElementById("tip");
+
+function mix(l){
+  const c = {ai:0,assist:0,human:0};
+  l.stages.forEach(s => c[s.lvl]++);
+  const t = l.stages.length;
+  const dom = c.ai > c.assist && c.ai > c.human ? "ai" : (c.human > c.assist ? "human" : "assist");
+  return {c,t,dom};
+}
+
+function nodeEl(l,i){
+  const m = mix(l);
+  const b = document.createElement("button");
+  b.className = "node" + (l.optional ? " optional" : "");
+  b.dataset.id = l.id;
+  b.style.setProperty("--c", l.c);
+  b.style.setProperty("--auto", AUTOC[m.dom]);
+  b.setAttribute("aria-describedby","tip");
+  b.innerHTML = `
+    <span class="node-top">
+      <span class="idx">${i+1}</span>
+      <h3>${l.name}</h3>
+    </span>
+    <p class="short">${l.short}</p>
+    <span class="node-meta">
+      ${l.optional ? '<span class="pill opt">optional</span>' : ""}
+      ${l.owners.map(o => `<span class="pill">${o}</span>`).join("")}
+      <span class="pill count">${l.stages.length} stages</span>
+    </span>
+    <span class="meter" aria-hidden="true">
+      ${["ai","assist","human"].map(k => m.c[k] ? `<span class="s-${k}" style="flex:${m.c[k]}"></span>` : "").join("")}
+    </span>`;
+  b.addEventListener("click", () => select(l.id));
+  b.addEventListener("mouseenter", e => showTip(e.currentTarget, l.tip));
+  b.addEventListener("mouseleave", hideTip);
+  b.addEventListener("focus", e => showTip(e.currentTarget, l.tip));
+  b.addEventListener("blur", hideTip);
+  return b;
+}
+
+function gateEl(html, dashed){
+  const d = document.createElement("div");
+  d.className = "gate" + (dashed ? " dashed" : "");
+  d.innerHTML = `<span class="rail"></span><span class="label">${html}</span>`;
+  return d;
+}
+
+L.forEach((l,i) => {
+  if (i === 0) { flow.appendChild(nodeEl(l,i)); return; }
+  const gate = gateEl(GATES[i-1], !!l.optional || !!L[i-1].optional);
+  if (l.optional) {
+    const g = document.createElement("div");
+    g.className = "optgroup";
+    g.innerHTML = '<div class="bypass"><i>skip segmentation</i></div>';
+    g.appendChild(gate);
+    g.appendChild(nodeEl(l,i));
+    flow.appendChild(g);
+  } else {
+    flow.appendChild(gate);
+    flow.appendChild(nodeEl(l,i));
+  }
+});
+
+function select(id, push){
+  const i = L.findIndex(x => x.id === id);
+  const l = L[i], m = mix(l);
+  document.querySelectorAll(".node").forEach(n => n.classList.toggle("is-active", n.dataset.id === id));
+  detail.style.setProperty("--c", l.c);
+  detail.innerHTML = `
+    <div class="d-eyebrow">Layer ${i+1} of ${L.length}${l.optional ? " &middot; optional" : ""}</div>
+    <h2>${l.name}</h2>
+    <p class="d-short">${l.short}</p>
+    <div class="rowchips">
+      ${l.owners.map(o => `<span class="pill">${o}</span>`).join("")}
+      <span class="pill">${m.c.ai} AI &middot; ${m.c.assist} AI + human &middot; ${m.c.human} human</span>
+    </div>
+    <p class="d-body">${l.body}</p>
+    <div class="gates2">
+      <div class="box"><span class="t">Enters when</span>${l.entry}</div>
+      <div class="box"><span class="t">Leaves when</span>${l.exit}</div>
+    </div>
+    <h4>Stages</h4>
+    <ol class="stages">
+      ${l.stages.map(s => `
+        <li data-lvl="${s.lvl}" class="${s.exit ? "exit" : ""}">
+          <span class="sname">${s.n}</span><span class="tag">${LVL[s.lvl]}</span>
+          <p class="sdesc">${s.d}</p>
+        </li>`).join("")}
+    </ol>
+    <h4>Typical inputs</h4>
+    <div class="tags">${l.inputs.map(t => `<span>${t}</span>`).join("")}</div>
+    <div class="ainote"><span class="t">AI today, AI next</span>${l.ai}</div>
+    <div class="dnav">
+      <button ${i === 0 ? "disabled" : ""} data-go="${i-1}"><span class="k">Previous layer</span>${i > 0 ? L[i-1].name : "&mdash;"}</button>
+      <button class="next" ${i === L.length-1 ? "disabled" : ""} data-go="${i+1}"><span class="k">Next layer</span>${i < L.length-1 ? L[i+1].name : "&mdash;"}</button>
+    </div>`;
+  detail.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => {
+    select(L[+b.dataset.go].id, true);
+    document.querySelector(`.node[data-id="${L[+b.dataset.go].id}"]`).scrollIntoView({block:"center",behavior:"smooth"});
+  }));
+  if (push !== false) history.replaceState(null,"","#"+id);
+}
+
+function showTip(el, text){
+  tip.innerHTML = text;
+  tip.classList.add("on");
+  const r = el.getBoundingClientRect(), t = tip.getBoundingClientRect();
+  let top = r.top - t.height - 10;
+  if (top < 8) top = r.bottom + 10;
+  tip.style.top = top + "px";
+  tip.style.left = Math.max(8, Math.min(r.left + 12, innerWidth - t.width - 8)) + "px";
+}
+function hideTip(){ tip.classList.remove("on"); }
+
+document.getElementById("autoToggle").addEventListener("change", e => {
+  document.body.classList.toggle("automation", e.target.checked);
+});
+
+select(location.hash && L.some(l => "#"+l.id === location.hash) ? location.hash.slice(1) : L[0].id, false);
+</script>
+</body>
+</html>
